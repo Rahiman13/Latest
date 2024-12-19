@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import axios from 'axios';
-import Api_url from '../API';
 
 const FALLBACK_IMAGE = 'https://via.placeholder.com/400x300?text=No+Image';
 const FALLBACK_AVATAR = 'https://via.placeholder.com/100x100?text=User';
@@ -39,7 +38,7 @@ const Blog = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(`${Api_url}/api/blogs?populate=*`);
+                const response = await axios.get('http://localhost:1337/api/blogs?populate=*');
                 const allBlogs = response.data.data;
 
                 // Sort blogs by date
@@ -83,38 +82,20 @@ const Blog = () => {
     // Helper function to get image URL with fallback
     const getImageUrl = (image) => {
         if (!image || !image.url) return FALLBACK_IMAGE;
-        return `${Api_url}${image.url}`;
+        return `http://localhost:1337${image.url}`;
     };
 
     // Helper function to get author image URL with fallback
     const getAuthorImageUrl = (authorImage) => {
         if (!authorImage || !authorImage.url) return FALLBACK_AVATAR;
-        return `${Api_url}${authorImage.url}`;
+        return `http://localhost:1337${authorImage.url}`;
     };
 
-    // Add reusable animation variants
+    // Add new scroll-based animations
     const fadeInUp = {
         initial: { opacity: 0, y: 50 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-100px" }
-    };
-
-    const fadeIn = {
-        initial: { opacity: 0 },
-        whileInView: { opacity: 1 },
-        viewport: { once: true }
-    };
-
-    const slideInLeft = {
-        initial: { opacity: 0, x: -50 },
-        whileInView: { opacity: 1, x: 0 },
-        viewport: { once: true }
-    };
-
-    const slideInRight = {
-        initial: { opacity: 0, x: 50 },
-        whileInView: { opacity: 1, x: 0 },
-        viewport: { once: true }
     };
 
     return (
@@ -225,118 +206,77 @@ const Blog = () => {
                 </div>
             </motion.section>
 
-            {/* Featured/Recent Blog Section */}
-            <motion.section
-                className="relative py-20 px-4"
+            {/* Modified Recent Blog Section */}
+            <motion.section 
+                className="py-20 px-4"
                 {...fadeInUp}
             >
-                <motion.div
-                    className="max-w-7xl mx-auto"
-                    style={{ y: parallax2 }}
-                >
+                <div className="max-w-7xl mx-auto">
+                    <motion.h2 
+                        className="text-4xl font-bold text-white mb-8 flex items-center gap-3"
+                        {...fadeInUp}
+                    >
+                        <span className="text-[#d9764a]">📰</span> Latest Post
+                    </motion.h2>
                     {recentBlogs.map((blog) => (
                         <motion.article
                             key={blog.id}
-                            className="relative bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10"
+                            className="relative group"
                             {...fadeInUp}
-                            transition={{ duration: 0.6 }}
                         >
-                            <div className="relative h-[60vh] overflow-hidden">
+                            <div className="relative h-[600px] rounded-2xl overflow-hidden">
                                 <motion.img
                                     src={getImageUrl(blog.image)}
                                     alt={blog.title || 'Blog post'}
                                     className="w-full h-full object-cover"
                                     whileHover={{ scale: 1.05 }}
-                                    {...fadeIn}
-                                    transition={{ duration: 0.6 }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#19234d] via-[#19234d]/50 to-transparent" />
-                                <div className="absolute bottom-0 left-0 right-0 p-8">
-                                    <motion.span
-                                        className="inline-block px-4 py-2 bg-[#d9764a] rounded-full text-white text-sm mb-4"
-                                        {...slideInLeft}
-                                        transition={{ delay: 0.2 }}
-                                    >
-                                        {blog.category || 'Uncategorized'}
-                                    </motion.span>
-                                    <motion.h2
-                                        className="text-4xl md:text-6xl font-bold text-white mb-4"
-                                        {...fadeInUp}
-                                        transition={{ delay: 0.3 }}
-                                    >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                                <div className="absolute bottom-0 p-6 w-full">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="px-3 py-1 bg-[#d9764a] rounded-full text-sm text-white">
+                                            {blog.category || 'Uncategorized'}
+                                        </span>
+                                        <span className="text-gray-300 text-sm">
+                                            {blog.posted_on 
+                                                ? new Date(blog.posted_on).toLocaleDateString()
+                                                : '-'
+                                            }
+                                        </span>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">
                                         {blog.title || 'Untitled Post'}
-                                    </motion.h2>
-                                    <motion.p
-                                        className="text-xl text-gray-300 mb-6 max-w-3xl"
-                                        {...fadeInUp}
-                                        transition={{ delay: 0.4 }}
-                                    >
+                                    </h3>
+                                    <p className="text-gray-300 line-clamp-2 mb-4">
                                         {blog.excerpt || 'No excerpt available'}
-                                    </motion.p>
-                                    <div className="flex items-center gap-4">
-                                        <img
-                                            src={getAuthorImageUrl(blog.authorImage)}
-                                            alt={blog.author || 'Author'}
-                                            className="w-12 h-12 rounded-full border-2 border-white/20"
-                                        />
-                                        {/* <div>
-                                            <p className="text-white">{blog.author || 'Anonymous'}</p>
-                                            <p className="text-gray-400">
-                                                {blog.posted_on
-                                                    ? new Date(blog.posted_on).toLocaleDateString()
-                                                    : '-'
-                                                } · {blog.readingTime || '-'} min read
-                                            </p>
-                                        </div> */}
-                                        
-                                        <div className="flex flex-col">
-                                            <span className="text-gray-400 font-bold">{blog.author || 'Anonymous'}</span>
-                                            <span className="text-gray-400 text-sm">
-                                                {new Date(blog.posted_on).getDate()}{new Date(blog.posted_on).getDate() % 10 === 1 && new Date(blog.posted_on).getDate() !== 11 ? 'st' : new Date(blog.posted_on).getDate() % 10 === 2 && new Date(blog.posted_on).getDate() !== 12 ? 'nd' : new Date(blog.posted_on).getDate() % 10 === 3 && new Date(blog.posted_on).getDate() !== 13 ? 'rd' : 'th'} {new Date(blog.posted_on).toLocaleString('default', { month: 'long' })} {new Date(blog.posted_on).getFullYear()} - {blog.readingTime || '-'} min read
+                                    </p>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={getAuthorImageUrl(blog.authorImage)}
+                                                alt={blog.author || 'Author'}
+                                                className="w-8 h-8 rounded-full"
+                                            />
+                                            <span className="text-white text-sm">
+                                                {blog.author || 'Anonymous'}
                                             </span>
+                                        </div>
+                                        <div className="flex items-center gap-4 text-white/80 text-sm">
+                                            <span>{blog.readingTime || '-'} min read</span>
+                                            <span>•</span>
+                                            <span>{blog.views || '0'} views</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </motion.article>
                     ))}
-                </motion.div>
+                </div>
             </motion.section>
 
-            {/* Categories Section */}
-            {/* <motion.section 
+            {/* Categories Section with Stats */}
+            <motion.section 
                 className="py-8 px-4"
-                {...fadeInUp}
-            >
-                <motion.div className="max-w-7xl mx-auto">
-                    <motion.div 
-                        className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
-                        {...fadeIn}
-                    >
-                        {categories.map(({ name, icon }, index) => (
-                            <motion.button
-                                key={name}
-                                onClick={() => setSelectedCategory(name)}
-                                className={`px-6 py-2 rounded-full flex items-center gap-2
-                                    ${selectedCategory === name
-                                        ? 'bg-[#d9764a] text-white'
-                                        : 'bg-white/10 text-white hover:bg-white/20'
-                                    }`}
-                                {...fadeInUp}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <span>{icon}</span>
-                                {name}
-                            </motion.button>
-                        ))}
-                    </motion.div>
-                </motion.div>
-            </motion.section> */}
-
-            <motion.section
-                className="pt-2 pb-6 px-4"
                 {...fadeInUp}
             >
                 <div className="max-w-7xl mx-auto">
@@ -364,90 +304,96 @@ const Blog = () => {
                 </div>
             </motion.section>
 
-            {/* Blog Posts Grid */}
-            <motion.section
-                className="py-20 px-4"
+            {/* Blog Grid */}
+            <motion.section 
+                className="py-12 px-4"
                 {...fadeInUp}
             >
-                <motion.div
-                    className="max-w-7xl mx-auto"
-                    style={{ y: parallax2 }}
-                >
-                    <motion.div
-                        className="grid md:grid-cols-2 gap-8"
-                        {...fadeIn}
+                <div className="max-w-7xl mx-auto">
+                    <motion.div 
+                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                        layout
                     >
                         {filteredBlogs.map((blog, index) => (
                             <motion.article
                                 key={blog.id}
-                                className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10"
-                                {...fadeInUp}
+                                className="group bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10"
+                                layout
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                whileHover={{
-                                    y: -10,
-                                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-                                }}
+                                whileHover={{ y: -10 }}
                             >
-                                <div className="relative overflow-hidden h-60">
+                                <div className="relative overflow-hidden aspect-[16/9]">
                                     <motion.img
                                         src={getImageUrl(blog.image)}
                                         alt={blog.title || 'Blog post'}
                                         className="w-full h-full object-cover"
                                         whileHover={{ scale: 1.1 }}
-                                        {...fadeIn}
-                                        transition={{ duration: 0.6 }}
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#19234d] via-transparent to-transparent opacity-60" />
-                                </div>
-                                <motion.div
-                                    className="p-6"
-                                    {...fadeInUp}
-                                    transition={{ delay: 0.2 }}
-                                >
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-[#d9764a]">{blog.category || 'Uncategorized'}</span>
-                                        <span className="text-gray-400 text-sm">{blog.readingTime || '-'} min read</span>
+                                    <div className="absolute top-4 right-4 flex gap-2">
+                                        <motion.span 
+                                            className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm text-white"
+                                            whileHover={{ scale: 1.1 }}
+                                        >
+                                            {blog.likes || '0'} ❤️
+                                        </motion.span>
+                                        <motion.span 
+                                            className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm text-white"
+                                            whileHover={{ scale: 1.1 }}
+                                        >
+                                            {blog.views || '0'} 👁️
+                                        </motion.span>
                                     </div>
-                                    <motion.h2
-                                        className="text-2xl font-bold text-white mb-3"
-                                        {...fadeInUp}
-                                        transition={{ delay: 0.3 }}
-                                    >
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="px-3 py-1 bg-[#d9764a]/20 rounded-full text-[#d9764a]">
+                                            {blog.category || 'Uncategorized'}
+                                        </span>
+                                        <span className="text-gray-400 text-sm">
+                                            {blog.posted_on 
+                                                ? new Date(blog.posted_on).toLocaleDateString()
+                                                : '-'
+                                            }
+                                        </span>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-3 line-clamp-2">
                                         {blog.title || 'Untitled Post'}
-                                    </motion.h2>
-                                    <motion.p
-                                        className="text-gray-300 mb-4"
-                                        {...fadeInUp}
-                                        transition={{ delay: 0.4 }}
-                                    >
+                                    </h3>
+                                    <p className="text-gray-300 mb-4 line-clamp-3">
                                         {blog.excerpt || 'No excerpt available'}
-                                    </motion.p>
+                                    </p>
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center gap-3">
-                                            <img
+                                            <img 
                                                 src={getAuthorImageUrl(blog.authorImage)}
                                                 alt={blog.author || 'Author'}
                                                 className="w-8 h-8 rounded-full border border-white/20"
                                             />
-                                            <div className="flex flex-col">
-                                                <span className="text-gray-400 font-bold">{blog.author || 'Anonymous'}</span>
-                                                <span className="text-gray-400 text-sm">
-                                                    {new Date(blog.posted_on).getDate()}{new Date(blog.posted_on).getDate() % 10 === 1 && new Date(blog.posted_on).getDate() !== 11 ? 'st' : new Date(blog.posted_on).getDate() % 10 === 2 && new Date(blog.posted_on).getDate() !== 12 ? 'nd' : new Date(blog.posted_on).getDate() % 10 === 3 && new Date(blog.posted_on).getDate() !== 13 ? 'rd' : 'th'} {new Date(blog.posted_on).toLocaleString('default', { month: 'long' })} {new Date(blog.posted_on).getFullYear()}
-                                                </span>
+                                            <div>
+                                                <p className="text-white text-sm">
+                                                    {blog.author || 'Anonymous'}
+                                                </p>
+                                                <p className="text-gray-400 text-sm">
+                                                    {blog.readingTime || '-'} min read
+                                                </p>
                                             </div>
                                         </div>
                                         <motion.button
-                                            className="text-[#d9764a] hover:text-[#de7527]"
-                                            whileHover={{ scale: 1.05 }}
+                                            className="text-[#d9764a] hover:text-[#de7527] flex items-center gap-1"
+                                            whileHover={{ x: 5 }}
                                         >
-                                            Read More →
+                                            Read More 
+                                            <span className="text-lg">→</span>
                                         </motion.button>
                                     </div>
-                                </motion.div>
+                                </div>
                             </motion.article>
                         ))}
                     </motion.div>
-                </motion.div>
+                </div>
             </motion.section>
         </div>
     );

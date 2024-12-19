@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import CountUp from 'react-countup';
 
 const Services = () => {
     const { scrollYProgress } = useScroll();
@@ -18,19 +19,69 @@ const Services = () => {
     const parallax2 = useTransform(smoothProgress, [0, 1], [0, -150]);
     const parallax3 = useTransform(smoothProgress, [0, 1], [0, -75]);
 
-    // Services data (reused from Home page)
+    // Updated services data with detailed content from HTML files
     const services = [
         {
             icon: "💻",
-            title: "Custom Software Development",
-            description: "Tailored solutions to meet your specific business needs and challenges."
+            title: "Web Development",
+            description: "End-to-end web programming solutions with cutting-edge technology.",
+            details: {
+                image: "/assets/images/resources/web-development.jpg",
+                features: [
+                    "Supply chain management web apps",
+                    "Online services applications",
+                    "Web portals",
+                    "Custom CMS solutions"
+                ],
+                additionalInfo: "Our skilled web app development services offer both front-end and back-end solutions with user-friendly interfaces."
+            }
         },
         {
-            icon: "🌐",
-            title: "Web Development",
-            description: "Modern, responsive websites and web applications built with cutting-edge technologies."
+            icon: "🎨",
+            title: "UI/UX Design",
+            description: "Creating intuitive and engaging user experiences.",
+            details: {
+                image: "/assets/images/resources/ui-design.jpg",
+                features: [
+                    "Research",
+                    "Storyboarding",
+                    "Sketching",
+                    "Wireframes",
+                    "Visual Design"
+                ],
+                additionalInfo: "Our User Experience Design process has proven itself time and time again with a systematic approach to each project."
+            }
         },
-        // ... other services
+        {
+            icon: "📱",
+            title: "App Development",
+            description: "Native and hybrid mobile solutions for iOS and Android.",
+            details: {
+                image: "/assets/images/resources/app-development.jpg",
+                features: [
+                    "Native iOS / Android Development",
+                    "Hybrid App Development",
+                    "App Testing",
+                    "App Maintenance"
+                ],
+                additionalInfo: "Comprehensive mobile app development services from concept to deployment and maintenance."
+            }
+        },
+        {
+            icon: "📢",
+            title: "Digital Marketing",
+            description: "Strategic online marketing solutions for business growth.",
+            details: {
+                image: "/assets/images/resources/digital-marketing.jpg",
+                features: [
+                    "SEO Services",
+                    "Lead Generation",
+                    "Affiliate Marketing",
+                    "Brand Promotion"
+                ],
+                additionalInfo: "We deliver the best by focusing on PPC, Conversion Optimization, Social Media, and SEO strategies."
+            }
+        }
     ];
 
     // Enhanced bubble configuration (reused from Home page)
@@ -43,12 +94,32 @@ const Services = () => {
         moveRange: Math.random() * 30 + 20,
     }));
 
-    // Add new data for additional sections
+    // Stats data with animation values
     const serviceStats = [
-        { number: "500+", label: "Projects Delivered" },
-        { number: "95%", label: "Client Satisfaction" },
-        { number: "50+", label: "Expert Developers" },
-        { number: "24/7", label: "Support Available" },
+        { 
+            number: 500,
+            suffix: "+",
+            label: "Projects Delivered",
+            duration: 2.5
+        },
+        { 
+            number: 95,
+            suffix: "%",
+            label: "Client Satisfaction",
+            duration: 2
+        },
+        { 
+            number: 50,
+            suffix: "+",
+            label: "Expert Developers",
+            duration: 2
+        },
+        { 
+            number: 24,
+            suffix: "/7",
+            label: "Support Available",
+            duration: 1.5
+        }
     ];
 
     const processSteps = [
@@ -137,11 +208,22 @@ const Services = () => {
                         <p className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto mb-12">
                             Innovative solutions for your digital transformation journey
                         </p>
+
+                        {/* Animated scroll indicator */}
+                        <motion.div
+                            className="absolute bottom-[1px] left-1/2 transform -translate-x-1/2"
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                        >
+                            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+                                <div className="w-2 h-2 bg-white rounded-full mt-2"></div>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             </motion.section>
 
-            {/* Stats Section */}
+            {/* Enhanced Stats Section with Animations */}
             <section className="py-20 relative z-10">
                 <motion.div
                     className="max-w-7xl mx-auto px-4"
@@ -166,7 +248,13 @@ const Services = () => {
                                     className="text-5xl md:text-6xl font-bold text-white mb-2"
                                     whileHover={{ scale: 1.1 }}
                                 >
-                                    {stat.number}
+                                    <CountUp
+                                        end={stat.number}
+                                        duration={stat.duration}
+                                        suffix={stat.suffix}
+                                        enableScrollSpy
+                                        scrollSpyOnce
+                                    />
                                 </motion.h3>
                                 <p className="text-gray-300">{stat.label}</p>
                             </motion.div>
@@ -175,54 +263,95 @@ const Services = () => {
                 </motion.div>
             </section>
 
-            {/* Services Grid with Enhanced Animations */}
-            <section className="relative z-10 py-20 px-4 md:px-6">
-                <motion.div
-                    className="max-w-7xl mx-auto"
-                    style={{ y: parallax3 }}
+            {/* Zigzag Service Sections */}
+            {services.map((service, index) => (
+                <motion.section
+                    key={index}
+                    className="relative py-20"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
                 >
-                    <motion.h2
-                        className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                    >
-                        What We Offer
-                    </motion.h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {services.map((service, index) => (
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className={`grid md:grid-cols-2 gap-16 items-center ${index % 2 === 0 ? '' : 'md:grid-flow-dense'}`}>
+                            {/* Image Column */}
                             <motion.div
-                                key={index}
-                                className="group relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl overflow-hidden border border-white/10"
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                className={`relative ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}
+                                initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{
-                                    y: -10,
-                                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-                                }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
                             >
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                <div className="relative z-10">
+                                <div className="relative group overflow-hidden rounded-2xl shadow-2xl">
+                                    <img
+                                        src={service.details.image}
+                                        alt={service.title}
+                                        className="w-full h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
+                                </div>
+                            </motion.div>
+
+                            {/* Content Column */}
+                            <motion.div
+                                className={`${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}
+                                initial={{ x: index % 2 === 0 ? 100 : -100, opacity: 0 }}
+                                whileInView={{ x: 0, opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                            >
+                                <div className="space-y-8">
                                     <motion.div
-                                        className="text-6xl mb-6"
+                                        className="text-7xl"
                                         whileHover={{ scale: 1.2, rotate: 5 }}
                                     >
                                         {service.icon}
                                     </motion.div>
-                                    <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                                    <p className="text-gray-300">{service.description}</p>
+                                    
+                                    <div>
+                                        <h3 className="text-4xl font-bold text-white mb-4">{service.title}</h3>
+                                        <p className="text-gray-300 text-lg leading-relaxed">{service.description}</p>
+                                    </div>
+                                    
+                                    {/* Features List */}
+                                    <div className="space-y-4">
+                                        {service.details.features.map((feature, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                className="flex items-center space-x-3 bg-white/5 backdrop-blur-sm rounded-lg p-3"
+                                                initial={{ opacity: 0, x: -20 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: idx * 0.1 }}
+                                                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+                                            >
+                                                <span className="text-green-400 text-xl">✓</span>
+                                                <span className="text-gray-200">{feature}</span>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+
+                                    <p className="text-gray-400 italic border-l-4 border-[#d9764a] pl-4">
+                                        {service.details.additionalInfo}
+                                    </p>
+
+                                    <motion.button
+                                        className="px-8 py-4 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full text-white font-semibold shadow-lg hover:shadow-[#d9764a]/50 transition-shadow"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        Learn More
+                                    </motion.button>
                                 </div>
                             </motion.div>
-                        ))}
+                        </div>
                     </div>
-                </motion.div>
-            </section>
+                </motion.section>
+            ))}
 
             {/* Process Section */}
-            <section className="py-20 mt-20 px-4">
+            <section className="py-10 mt-56 px-4">
                 <motion.div
                     className="max-w-7xl mx-auto"
                     style={{ y: parallax1 }}

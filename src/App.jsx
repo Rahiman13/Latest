@@ -6,10 +6,12 @@ import About from './Pages/About';
 import Services from './Pages/Services';
 import Blog from './Pages/Blog';
 import Contact from './Pages/Contact';
+import ScrollToTop from './components/ScrolltoTop';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import CountUp  from 'react-countup';
 
 const About = () => {
   // Add scroll progress tracking
@@ -21,10 +22,22 @@ const About = () => {
   const parallax2 = useTransform(smoothProgress, [0, 1], [0, -150]);
   const parallax3 = useTransform(smoothProgress, [0, 1], [0, -75]);
 
+  // Add new transform effects
+  const rotateX = useTransform(smoothProgress, [0, 1], [0, 360]);
+  const textGradient = useTransform(smoothProgress, [0, 1], ["0deg", "360deg"]);
+
+  // Enhanced fadeInUp animation
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
+    transition: { duration: 0.6, type: "spring", stiffness: 100 }
+  };
+
+  // Add hover animations for stats
+  const statHover = {
+    scale: 1.1,
+    rotate: [0, 5, -5, 0],
+    transition: { duration: 0.5 }
   };
 
   // Add bubble configuration similar to Home page
@@ -38,10 +51,34 @@ const About = () => {
   }));
 
   const achievements = [
-    { number: "98%", label: "Client Satisfaction" },
-    { number: "250+", label: "Projects Delivered" },
-    { number: "15+", label: "Industry Awards" },
-    { number: "24/7", label: "Support Available" },
+    { 
+      number: "98", 
+      suffix: "%",
+      label: "Client Satisfaction",
+      duration: 2.5
+
+    },
+    { 
+      number: "250", 
+      suffix: "+",
+      label: "Projects Delivered",
+      duration: 2
+
+    },
+    { 
+      number: "15", 
+      suffix: "+",
+      label: "Industry Awards",
+      duration: 2
+
+    },
+    { 
+      number: "24", 
+      suffix: "/7", 
+      label: "Support Available",
+      duration: 2
+
+    },
   ];
 
   const values = [
@@ -180,7 +217,8 @@ const About = () => {
         style={{
           scale,
           opacity,
-          filter: `blur(${blurValue}px)`
+          filter: `blur(${blurValue}px)`,
+          rotateX // Add 3D rotation effect
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-[#19234d]/90 to-[#2b5a9e]/90" />
@@ -226,6 +264,7 @@ const About = () => {
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
+                whileHover={statHover}
                 viewport={{ once: true }}
                 transition={{ 
                   duration: 0.5, 
@@ -234,12 +273,14 @@ const About = () => {
                   bounce: 0.4
                 }}
               >
-                <motion.h3 
+                <CountUp 
+                  start={0} 
+                  end={stat.number} 
+                  duration={stat.duration} 
+                  separator="," 
+                  suffix={stat.suffix}
                   className="text-5xl md:text-6xl font-bold text-white mb-2"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  {stat.number}
-                </motion.h3>
+                />
                 <p className="text-gray-300">{stat.label}</p>
               </motion.div>
             ))}
@@ -340,8 +381,14 @@ const About = () => {
                 whileHover={{ 
                   y: -10, 
                   scale: 1.02,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 15
+                  }
                 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <motion.div 
                   className="text-5xl mb-6"
@@ -386,49 +433,58 @@ const About = () => {
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
           >
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.name}
-                className="group bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10"
-                variants={{
-                  hidden: { opacity: 0, x: -50 },
-                  show: { opacity: 1, x: 0 }
-                }}
-                whileHover={{ 
-                  y: -10,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-                }}
-              >
-                <div className="relative overflow-hidden">
-                  <motion.img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-80 object-cover"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#19234d] via-transparent to-transparent opacity-60" />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    {member.name}
-                  </h3>
-                  <p className="text-[#d9764a] font-semibold mb-2">{member.position}</p>
-                  <p className="text-gray-300 mb-4">{member.bio}</p>
-                  <div className="flex gap-4">
-                    {Object.entries(member.social).map(([platform, link]) => (
-                      <a
-                        key={platform}
-                        href={link}
-                        className="text-gray-400 hover:text-white transition-colors"
-                      >
-                        <i className={`fab fa-${platform}`}></i>
-                      </a>
-                    ))}
+            <AnimatePresence>
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={member.name}
+                  className="group bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10"
+                  variants={{
+                    hidden: { opacity: 0, x: -50 },
+                    show: { opacity: 1, x: 0 }
+                  }}
+                  whileHover={{ 
+                    y: -10,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 15
+                    }
+                  }}
+                  exit={{ opacity: 0, x: 50 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                >
+                  <div className="relative overflow-hidden">
+                    <motion.img 
+                      src={member.image} 
+                      alt={member.name} 
+                      className="w-full h-80 object-cover"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#19234d] via-transparent to-transparent opacity-60" />
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {member.name}
+                    </h3>
+                    <p className="text-[#d9764a] font-semibold mb-2">{member.position}</p>
+                    <p className="text-gray-300 mb-4">{member.bio}</p>
+                    <div className="flex gap-4">
+                      {Object.entries(member.social).map(([platform, link]) => (
+                        <a
+                          key={platform}
+                          href={link}
+                          className="text-gray-400 hover:text-white transition-colors"
+                        >
+                          <i className={`fab fa-${platform}`}></i>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       </section>
