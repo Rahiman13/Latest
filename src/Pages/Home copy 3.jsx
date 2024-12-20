@@ -1,31 +1,24 @@
 import React, { useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import NewsletterForm from '../components/NewsLetter';
-import { toast, Toaster } from 'react-hot-toast';
-import CountUp from 'react-countup';
 
 const Home = () => {
-  const { scrollYProgress } = useScroll({
-    throttle: 0,
-    smooth: 0.1
-  });
+  const { scrollYProgress } = useScroll();
   
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 30,
-    damping: 15,
-    mass: 0.1,
+    stiffness: 100,
+    damping: 30,
     restDelta: 0.001
   });
 
-  const scale = useTransform(smoothProgress, [0, 0.15], [1, 1.5]);
-  const yMove = useTransform(smoothProgress, [0, 0.15], [0, 500]);
-  const opacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
-  const blurValue = useTransform(smoothProgress, [0, 0.15], [0, 10]);
+  const scale = useTransform(smoothProgress, [0, 0.2], [1, 1.5]);
+  const yMove = useTransform(smoothProgress, [0, 1], [0, 1000]);
+  const opacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+  const blurValue = useTransform(smoothProgress, [0, 0.2], [0, 10]);
   
-  const parallax1 = useTransform(smoothProgress, [0, 1], [0, -200]);
-  const parallax2 = useTransform(smoothProgress, [0, 1], [0, -100]);
-  const parallax3 = useTransform(smoothProgress, [0, 1], [0, -50]);
+  const parallax1 = useTransform(smoothProgress, [0, 1], [0, -300]);
+  const parallax2 = useTransform(smoothProgress, [0, 1], [0, -150]);
+  const parallax3 = useTransform(smoothProgress, [0, 1], [0, -75]);
 
   const services = [
     {
@@ -61,10 +54,10 @@ const Home = () => {
   ];
 
   const stats = [
-    { number: 250, label: "Projects Completed", suffix: "+" },
-    { number: 50, label: "Happy Clients", suffix: "+" },
-    { number: 15, label: "Team Members", suffix: "+" },
-    { number: 5, label: "Years Experience", suffix: "+" }
+    { number: "250+", label: "Projects Completed" },
+    { number: "50+", label: "Happy Clients" },
+    { number: "15+", label: "Team Members" },
+    { number: "5+", label: "Years Experience" }
   ];
 
   const features = [
@@ -90,25 +83,25 @@ const Home = () => {
       title: "Discovery",
       description: "We dive deep into understanding your business needs, goals, and challenges through comprehensive consultation.",
       icon: "🔍",
-      image: "https://media.istockphoto.com/id/1465316262/photo/businessman-inspecting-paperwork-document-of-business-data-analysis-working-management-report.webp?a=1&b=1&s=612x612&w=0&k=20&c=82eFZNGe9kKbLXaITf8YEL6jV-g113gP2rOKtV2kTJY="
+      image: "/images/discovery.jpg"
     },
     {
       title: "Planning",
       description: "Our team creates detailed roadmaps and strategies tailored to your specific requirements.",
       icon: "📋",
-      image: "https://images.unsplash.com/photo-1580795478844-5ed694336c90?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHBsYW5uaW5nfGVufDB8fDB8fHww"
+      image: "/images/planning.jpg"
     },
     {
       title: "Development",
       description: "We bring your vision to life using cutting-edge technologies and best development practices.",
       icon: "⚙️",
-      image: "https://media.istockphoto.com/id/2156387160/photo/hispanic-latin-american-couple-software-engineer-developer-use-computer-work-on-program.webp?a=1&b=1&s=612x612&w=0&k=20&c=MwCwZmlsa6rhG5ppvCCN-OR67mdcx2WkD5SUouSzSrE="
+      image: "/images/development.jpg"
     },
     {
       title: "Launch",
       description: "Your solution goes live with our full support and continuous optimization.",
       icon: "🚀",
-      image: "https://plus.unsplash.com/premium_photo-1683288537140-e5dd2c5f0911?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGxhdW5jaHxlbnwwfHwwfHx8MA%3D%3D"
+      image: "/images/launch.jpg"
     }
   ];
 
@@ -117,19 +110,19 @@ const Home = () => {
       text: "Projexino Solutions transformed our business with their innovative web solutions. Their team's expertise and dedication are truly exceptional.",
       author: "Sarah Johnson",
       position: "CTO, TechVision Inc",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmZlc2lvbmFsJTIwcGVvcGxlfGVufDB8fDB8fHww"
+      image: "/images/testimonial1.jpg"
     },
     {
       text: "The mobile app they developed for us exceeded our expectations. Professional, responsive, and highly skilled team.",
       author: "Michael Chen",
       position: "Founder, StartUp Hub",
-      image: "https://images.unsplash.com/photo-1558222218-b7b54eede3f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmZlc2lvbmFsJTIwcGVvcGxlfGVufDB8fDB8fHww"
+      image: "/images/testimonial2.jpg"
     },
     {
       text: "Outstanding digital marketing results! They helped us achieve a 200% increase in online presence.",
       author: "Emma Williams",
       position: "Marketing Director, Growth Co",
-      image: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZmZXNpb25hbCUyMHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D"
+      image: "/images/testimonial3.jpg"
     }
   ];
 
@@ -145,14 +138,10 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
-      {/* Add Toaster component */}
-      <Toaster />
-
-      {/* Progress Bar - smoother animation */}
+      {/* Add Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#d9764a] to-[#de7527] origin-left z-50"
         style={{ scaleX: smoothProgress }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
       />
 
       {/* Floating Bubbles Container - spans entire page */}
@@ -194,7 +183,7 @@ const Home = () => {
         </div>
       </div> */}
 
-      {/* Hero Section - adjusted timing */}
+      {/* Hero Section with enhanced effects */}
       <motion.section 
         className="min-h-screen relative flex items-center justify-center px-4"
         style={{
@@ -203,7 +192,6 @@ const Home = () => {
           opacity,
           filter: `blur(${blurValue}px)`
         }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
       >
         {/* Animated Background Lines */}
         <div className="absolute inset-0 overflow-hidden">
@@ -303,11 +291,11 @@ const Home = () => {
         }
       `}</style>
 
-      {/* Update the perspective container for smoother 3D effects */}
+      {/* Add perspective container for remaining sections */}
       <motion.div 
         className="relative"
         style={{
-          perspective: "2000px",
+          perspective: "1000px",
           transformStyle: "preserve-3d"
         }}
       >
@@ -320,42 +308,14 @@ const Home = () => {
                 {stats.map((stat, index) => (
                   <motion.div
                     key={index}
-                    className="relative group"
+                    className="text-center"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <div className="text-center relative">
-                      {/* Animated background glow */}
-                      <motion.div 
-                        className="absolute inset-0 bg-[#d9764a]/20 rounded-full blur-3xl"
-                        animate={{
-                          scale: [1, 1.2, 1],
-                          opacity: [0.5, 0.8, 0.5],
-                        }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      />
-                      
-                      <motion.h3 
-                        className="text-6xl md:text-7xl font-bold text-white mb-2 relative"
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 200 }}
-                      >
-                        <CountUp
-                          end={stat.number}
-                          duration={2.5}
-                          suffix={stat.suffix}
-                          enableScrollSpy
-                          scrollSpyOnce
-                        />
-                      </motion.h3>
-                      <p className="text-gray-300 text-lg relative">{stat.label}</p>
-                    </div>
+                    <h3 className="text-5xl md:text-6xl font-bold text-white mb-2">{stat.number}</h3>
+                    <p className="text-gray-300">{stat.label}</p>
                   </motion.div>
                 ))}
               </div>
@@ -405,12 +365,12 @@ const Home = () => {
                   className="relative"
                 >
                   <img 
-                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGlkZWElMjB0byUyMGRpZ2l0YWwlMjBzdWNjZXNzfGVufDB8fDB8fHww" 
+                    src="/images/about-image.jpg" 
                     alt="About Us" 
                     className="rounded-2xl shadow-xl"
                   />
                   <div className="absolute -bottom-6 -right-6 bg-gradient-to-r from-[#d9764a] to-[#de7527] p-6 rounded-xl text-white">
-                    <h3 className="text-2xl font-bold">5+</h3>
+                    <h3 className="text-2xl font-bold">10+</h3>
                     <p>Years Experience</p>
                   </div>
                 </motion.div>
@@ -487,7 +447,7 @@ const Home = () => {
             </div>
           </section>
 
-          {/* Testimonials Section */}
+          {/* Testimonials Section with Images */}
           <section className="py-20 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4">
               <motion.h2 
@@ -499,126 +459,29 @@ const Home = () => {
                 Client Success Stories
               </motion.h2>
               
-              <div className="grid lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
                   <motion.div
                     key={index}
-                    className="relative group h-full"
+                    className="bg-white/5 backdrop-blur-lg rounded-2xl p-8"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.2 }}
                   >
-                    {/* Card container with hover effects */}
-                    <motion.div 
-                      className="h-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl p-8 relative overflow-hidden"
-                      whileHover={{ y: -10 }}
-                      transition={{ type: "spring", stiffness: 200 }}
-                    >
-                      {/* Animated gradient border */}
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-r from-[#d9764a]/0 via-[#d9764a]/30 to-[#d9764a]/0"
-                        animate={{
-                          x: ['-100%', '100%'],
-                        }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          ease: "linear"
-                        }}
+                    <div className="text-yellow-400 text-2xl mb-4">★★★★★</div>
+                    <p className="text-gray-300 mb-6">"{testimonial.text}"</p>
+                    <div className="flex items-center">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full object-cover mr-4"
                       />
-                      
-                      {/* Glowing orb */}
-                      <motion.div
-                        className="absolute -top-10 -right-10 w-32 h-32 bg-[#d9764a]/20 rounded-full blur-3xl"
-                        animate={{
-                          scale: [1, 1.2, 1],
-                          opacity: [0.3, 0.6, 0.3],
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      />
-
-                      {/* Quote icon with animation */}
-                      <motion.div 
-                        className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-[#d9764a] to-[#de7527] rounded-full flex items-center justify-center"
-                        whileHover={{ scale: 1.2, rotate: 180 }}
-                        transition={{ type: "spring", stiffness: 200 }}
-                      >
-                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                        </svg>
-                      </motion.div>
-                      
-                      {/* Rating stars with staggered animation */}
-                      <div className="flex mb-6">
-                        {[...Array(5)].map((_, i) => (
-                          <motion.svg
-                            key={i}
-                            className="w-5 h-5 text-yellow-500 mr-1"
-                            initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                            transition={{ 
-                              delay: 0.1 * i,
-                              type: "spring",
-                              stiffness: 200
-                            }}
-                            whileHover={{ scale: 1.2, rotate: 180 }}
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </motion.svg>
-                        ))}
+                      <div>
+                        <h4 className="text-white font-bold">{testimonial.author}</h4>
+                        <p className="text-gray-400">{testimonial.position}</p>
                       </div>
-
-                      {/* Testimonial content */}
-                      <motion.p 
-                        className="text-gray-300 mb-8 relative z-10 min-h-[100px]"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        {testimonial.text}
-                      </motion.p>
-                      
-                      {/* Author info with hover effects */}
-                      <div className="flex items-center mt-auto">
-                        <motion.div 
-                          className="relative w-12 h-12 mr-4"
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.author}
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                          <motion.div 
-                            className="absolute inset-0 rounded-full border-2 border-[#d9764a]"
-                            initial={{ opacity: 0, scale: 1.2 }}
-                            whileHover={{ opacity: 1, scale: 1 }}
-                            transition={{ type: "spring", stiffness: 200 }}
-                          />
-                        </motion.div>
-                        <div>
-                          <motion.h4 
-                            className="text-white font-bold"
-                            whileHover={{ x: 5 }}
-                          >
-                            {testimonial.author}
-                          </motion.h4>
-                          <motion.p 
-                            className="text-gray-400"
-                            whileHover={{ x: 5 }}
-                          >
-                            {testimonial.position}
-                          </motion.p>
-                        </div>
-                      </div>
-                    </motion.div>
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -649,8 +512,7 @@ const Home = () => {
                     whileHover={{ y: -10 }}
                   >
                     <img 
-                      // src={`/images/project${index + 1}.jpg`}
-                      src={`https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHdlYiUyMHByb2plY3RzfGVufDB8fDB8fHww`}
+                      src={`/images/project${index + 1}.jpg`}
                       alt={`Project ${index + 1}`}
                       className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
@@ -707,126 +569,50 @@ const Home = () => {
             </div>
           </section>
 
-          {/* Newsletter Section - Optimized animations */}
+          {/* Newsletter Section */}
           <motion.section 
             className="relative py-32 px-4 md:px-6 overflow-hidden"
             initial={{ opacity: 0 }}
-            whileInView={{ 
-              opacity: 1,
-              transition: {
-                duration: 0.4,
-                ease: "easeOut"
-              }
-            }}
-            viewport={{ 
-              once: true, 
-              margin: "-50px",
-              amount: 0.3
-            }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
           >
-            {/* Background gradient overlay - Simplified */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/50 to-[#2b5a9e]/50 backdrop-blur-sm" />
-
-            {/* Animated circles - Optimized */}
-            <div className="absolute inset-0">
-              {[...Array(3)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full mix-blend-overlay"
-                  style={{
-                    width: `${200 + i * 80}px`,
-                    height: `${200 + i * 80}px`,
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    left: `${20 + i * 10}%`,
-                    top: `${20 + i * 5}%`,
-                    willChange: 'transform'
-                  }}
-                  animate={{
-                    rotate: 360,
-                    scale: [1, 1.05, 1],
-                  }}
-                  transition={{
-                    duration: 15 + i * 5,
-                    repeat: Infinity,
-                    ease: "linear",
-                    repeatType: "loop"
-                  }}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2b5a9e] to-[#19234d] transform -skew-y-6"></div>
+            <div className="max-w-4xl mx-auto text-center relative z-10">
+              <motion.h2 
+                className="text-6xl font-bold text-white mb-8"
+                initial={{ y: 50 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+              >
+                Stay Updated
+              </motion.h2>
+              <motion.p 
+                className="text-2xl text-gray-300 mb-10"
+                initial={{ y: 50 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+              >
+                Subscribe to our newsletter for the latest updates and insights.
+              </motion.p>
+              <motion.form 
+                className="flex flex-col md:flex-row gap-4 justify-center"
+                initial={{ y: 50 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+              >
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="px-6 py-4 rounded-full text-lg bg-white/10 backdrop-blur-lg text-white placeholder-gray-400 border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#d9764a] flex-1 max-w-md"
                 />
-              ))}
-            </div>
-
-            {/* Content container */}
-            <div className="max-w-7xl mx-auto relative z-10">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* Left column - Text content */}
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4 }}
-                  className="text-center lg:text-left"
+                <motion.button 
+                  className="bg-gradient-to-r from-[#d9764a] to-[#de7527] px-10 py-4 rounded-full font-semibold text-white text-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <motion.h2 
-                    className="text-5xl md:text-6xl font-bold mb-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-                      Stay Ahead of
-                    </span>
-                    <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                      the Future
-                    </span>
-                  </motion.h2>
-                  
-                  <motion.p 
-                    className="text-xl text-gray-300 mb-8"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    Join our newsletter and get exclusive insights, industry updates, 
-                    and special offers delivered straight to your inbox.
-                  </motion.p>
-                  
-                  {/* Stats with optimized animations */}
-                  <motion.div 
-                    className="grid grid-cols-2 gap-6 mt-12"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="text-center lg:text-left">
-                      <div className="text-3xl font-bold text-white mb-2">5000+</div>
-                      <div className="text-gray-400">Subscribers</div>
-                    </div>
-                    <div className="text-center lg:text-left">
-                      <div className="text-3xl font-bold text-white mb-2">Weekly</div>
-                      <div className="text-gray-400">Updates</div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-
-                {/* Right column - Newsletter form */}
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4 }}
-                  className="relative"
-                >
-                  {/* Simplified decorative elements */}
-                  <div className="absolute -top-12 -right-12 w-20 h-20 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full blur-xl opacity-20" />
-                  <div className="absolute -bottom-12 -left-12 w-24 h-24 bg-gradient-to-r from-[#19234d] to-[#2b5a9e] rounded-full blur-xl opacity-20" />
-                  
-                  {/* Newsletter component */}
-                  <NewsletterForm />
-                </motion.div>
-              </div>
+                  Subscribe
+                </motion.button>
+              </motion.form>
             </div>
           </motion.section>
         </motion.div>
