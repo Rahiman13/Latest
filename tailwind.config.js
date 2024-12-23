@@ -30,6 +30,9 @@ module.exports = {
       backgroundSize: {
         '200': '200% 100%',
       },
+      backdropBlur: {
+        md: '12px',
+      },
     },
   },
   plugins: [],

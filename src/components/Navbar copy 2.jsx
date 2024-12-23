@@ -92,7 +92,7 @@ const Header = () => {
                   </span>
                   {/* Split-colored i */}
                   <span className="relative">
-                    <span className={`text-[77%] font-700 ${
+                    <span className={`text-[77%] font-bolder ${
                       scrolled ? 'text-[#19234d]' : 'text-white'
                     }`}>I</span>
                     <span className="absolute top-1 right-0 w-[3px] h-[0.20em] bg-[#de7527]" />
@@ -119,8 +119,8 @@ const Header = () => {
             </motion.div>
           </Link>
 
-          {/* Modified Desktop Navigation - Centered */}
-          <nav className="hidden md:flex items-center space-x-3 flex-1 justify-center">
+          {/* Enhanced Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-3">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -154,42 +154,25 @@ const Header = () => {
                 />
               </Link>
             ))}
-          </nav>
-
-          {/* New Phone Number Section */}
-          <div className="hidden md:flex items-center">
-            <a 
-              href="tel:+91 9601843090" 
-              className={`flex items-center space-x-2 ${
-                scrolled ? 'text-neutral-dark' : 'text-white'
+            {/* Enhanced CTA Button */}
+            <motion.button
+              whileHover={{ scale: 1.05, rotate: -1 }}
+              whileTap={{ scale: 0.95 }}
+              className={`relative px-7 py-3 rounded-2xl font-medium transition-all duration-300 overflow-hidden group ${
+                scrolled
+                  ? 'bg-gradient-to-r from-accent-orange to-accent-orange-bright text-white shadow-lg hover:shadow-xl' 
+                  : 'bg-white/15 backdrop-blur-xl text-white border border-white/20'
               }`}
             >
-              <motion.svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-5 w-5" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" 
-                />
-              </motion.svg>
-              <motion.span className="font-medium"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                +91 9601843090
-              </motion.span>
-            </a>
-          </div>
+              <span className="relative z-10">Get Started</span>
+              <div className={`absolute inset-0 transition-all duration-300 ${
+                scrolled
+                  ? 'group-hover:bg-gradient-to-r from-accent-orange-bright to-accent-orange opacity-90'
+                  : 'group-hover:bg-white/25'
+              }`} />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-180 transform translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+            </motion.button>
+          </nav>
 
           {/* Enhanced Mobile Menu Button */}
           <motion.button
@@ -208,7 +191,7 @@ const Header = () => {
           </motion.button>
         </div>
 
-        {/* Modified Mobile Navigation */}
+        {/* Mobile Navigation */}
         <AnimatePresence>
           {isOpen && (
             <motion.nav
@@ -252,30 +235,13 @@ const Header = () => {
                   transition={{ delay: navItems.length * 0.1 }}
                   className="px-4 pt-2"
                 >
-                  <a 
-                    href="tel:+1234567890"
-                    className={`w-full px-6 py-2 rounded-full font-medium transition-all flex items-center justify-center space-x-2 ${
-                      scrolled
-                        ? 'bg-accent-orange text-white hover:bg-accent-orange-bright'
-                        : 'bg-white text-primary-navy hover:bg-white/90'
-                    }`}
-                  >
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className="h-5 w-5" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" 
-                      />
-                    </svg>
-                    <span>+1 234 567 890</span>
-                  </a>
+                  <button className={`w-full px-6 py-2 rounded-full font-medium transition-all ${
+                    scrolled
+                      ? 'bg-accent-orange text-white hover:bg-accent-orange-bright'
+                      : 'bg-white text-primary-navy hover:bg-white/90'
+                  }`}>
+                    Get Started
+                  </button>
                 </motion.div>
               </motion.div>
             </motion.nav>

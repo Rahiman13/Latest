@@ -120,6 +120,7 @@ const Navbar = () => {
                           transition={{ duration: 0.2 }}
                           className="absolute left-0 mt-2 w-64 rounded-xl overflow-hidden shadow-lg"
                           style={{
+                            // background: 'rgba(255, 255, 255, 0.95)',
                             backdropFilter: 'blur(10px)',
                           }}
                         >
@@ -128,12 +129,13 @@ const Navbar = () => {
                               <motion.div
                                 key={dropItem.path}
                                 whileHover={{ x: 5 }}
+                                className="relative"
                               >
                                 <Link
                                   to={dropItem.path}
-                                  className="block w-full relative px-4 py-3 text-sm hover:bg-[#2b5a9e]/5 text-white hover:text-white/80"
+                                  className={`block px-4 py-3 text-sm hover:bg-[#2b5a9e]/5 text-white hover:text-white/80 text-[#19234d] w-full h-full`}
                                 >
-                                  <div className="relative z-10">{dropItem.name}</div>
+                                  {dropItem.name}
                                   {location.pathname === dropItem.path && (
                                     <motion.div
                                       layoutId="dropdown-indicator"
