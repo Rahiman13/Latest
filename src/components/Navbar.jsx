@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import Logo from '../assets/Navbar_logo.png';
+import Logo from '../assets/projexino.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,10 +54,10 @@ const Navbar = () => {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`p-2 rounded-xl bg-white/10 backdrop-blur-md'
+              className={`p-2 rounded-xl bg-black/10 backdrop-blur-md'
               }`}
             >
-              <img src={Logo} alt="Logo" className="h-10 w-auto" />
+              <img src={Logo} alt="Logo" className="h-14 w-auto" />
             </motion.div>
           </Link>
 
