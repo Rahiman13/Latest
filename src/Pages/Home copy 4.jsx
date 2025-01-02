@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import NewsletterForm from '../components/NewsLetter';
 import { toast, Toaster } from 'react-hot-toast';
 import CountUp from 'react-countup';
+import './Home.css';
+
 
 const Home = () => {
   const { scrollYProgress } = useScroll({
@@ -142,6 +144,8 @@ const Home = () => {
     initialY: Math.random() * 100,
     moveRange: Math.random() * 30 + 20,
   }));
+
+  const [currentService, setCurrentService] = useState(0);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
@@ -667,45 +671,229 @@ const Home = () => {
           </section>
 
           {/* Services Section */}
-          <section className="relative z-10 py-20 px-4 md:px-6">
-            <motion.h2 
-              className="text-7xl md:text-9xl font-bold text-white/10 mb-16 text-center overflow-hidden whitespace-nowrap"
-              initial={{ x: "-100%" }}
-              whileInView={{ x: "0%" }}
-              transition={{ duration: 0.8 }}
-            >
-              Our Services
-            </motion.h2>
-            
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <section className="h-screen sticky top-0 overflow-hidden backdrop-blur-lg bg-transparent relative z-10">
+            {/* Background Effects */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0">
+              <div className="absolute w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(217,118,74,0.1),transparent_70%)]" />
+            </div>
+
+            {/* Arc Path for Icons */}
+            <div className="absolute right-0 h-full w-1/2 pointer-events-none">
+              <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path
+                  d="M 50,100 A 50,50 0 0,1 50,0"
+                  fill="none"
+                  stroke="rgba(217,118,74,0.1)"
+                  strokeWidth="0.5"
+                />
+              </svg>
+            </div>
+
+            {/* Services Content */}
+            <div className="relative h-screen">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
-                  className="group relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl overflow-hidden border border-white/10"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ 
-                    y: -10,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+                  className="absolute inset-0 flex items-center px-4 md:px-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: index === currentService ? 1 : 0,
+                    transition: { duration: 0.5 }
                   }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative z-10">
+                  <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between">
+                    {/* Text Content */}
                     <motion.div 
-                      className="text-6xl mb-6"
-                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      className="w-full md:w-1/2 md:pr-8"
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ 
+                        opacity: index === currentService ? 1 : 0,
+                        x: index === currentService ? 0 : -50
+                      }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                      {service.icon}
+                      <h3 className="text-6xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                        {service.title}
+                      </h3>
+                      <p className="text-xl text-gray-300 mb-8">
+                        {service.description}
+                      </p>
+                      <motion.button
+                        className="px-8 py-3 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full text-white font-semibold"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Learn More
+                      </motion.button>
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                    <p className="text-gray-300">{service.description}</p>
+
+                    {/* Floating Icon */}
+                    <motion.div 
+                      className="w-full md:w-1/2 flex justify-center items-center"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ 
+                        opacity: index === currentService ? 1 : 0,
+                        scale: index === currentService ? 1 : 0.5
+                      }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                      <motion.div
+                        className="relative"
+                        animate={{
+                          y: [0, -20, 0],
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <motion.div
+                          className="absolute inset-0 bg-[#d9764a]/20 rounded-full blur-3xl"
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 0.8, 0.5],
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                        <div className="text-[200px] relative">
+                          {service.icon}
+                        </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
                 </motion.div>
               ))}
+
+              {/* Navigation Dots */}
+              <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col gap-4">
+                {services.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentService 
+                        ? 'bg-[#d9764a] scale-125' 
+                        : 'bg-white/30 hover:bg-white/50'
+                    }`}
+                    onClick={() => setCurrentService(index)}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                  />
+                ))}
+              </div>
             </div>
+
+            {/* Scroll Progress Indicator */}
+            <motion.div
+              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-white/50"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <span className="text-sm">Scroll to explore</span>
+              <motion.div
+                animate={{ y: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                ↓
+              </motion.div>
+            </motion.div>
           </section>
+
+          <section className="h-screen sticky top-0 overflow-hidden backdrop-blur-lg bg-gradient-to-b from-[#19234d] to-[#2b5a9e] relative">
+  {/* Arc Path for Icon */}
+  <svg className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
+    <path
+      id="arc-path"
+      d="M 50,100 A 50,50 0 0,1 50,0"
+      fill="none"
+      stroke="rgba(217,118,74,0.1)"
+      strokeWidth="1"
+    />
+  </svg>
+
+  <div className="relative h-full flex flex-col justify-center">
+    {services.map((service, index) => (
+      <motion.div
+        key={index}
+        className="absolute inset-0 flex items-center px-6"
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: currentService === index ? 1 : 0,
+          y: currentService === index ? 0 : 50,
+          scale: currentService === index ? 1 : 0.9,
+        }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="flex items-center justify-between w-full">
+          {/* Service Text */}
+          <motion.div
+            className="w-1/2"
+            initial={{ x: -50, opacity: 0 }}
+            animate={{
+              x: currentService === index ? 0 : -50,
+              opacity: currentService === index ? 1 : 0,
+            }}
+            transition={{ duration: 0.8 }}
+          >
+            <h3 className="text-6xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+              {service.title}
+            </h3>
+            <p className="text-lg text-gray-300 mt-4">{service.description}</p>
+          </motion.div>
+
+          {/* Service Icon */}
+          <motion.div
+            className="w-1/2 flex justify-center"
+            style={{ translatePath: `path("arc-path")` }}
+            animate={{
+              opacity: currentService === index ? 1 : 0,
+              translateY: currentService === index ? 0 : 100,
+              scale: currentService === index ? 1 : 0.8,
+            }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="text-[120px] text-[#d9764a] drop-shadow-xl">
+              {service.icon}
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    ))}
+
+    {/* Navigation Dots */}
+    <div className="absolute right-6 top-1/2 transform -translate-y-1/2 flex flex-col gap-3">
+      {services.map((_, idx) => (
+        <button
+          key={idx}
+          className={`w-4 h-4 rounded-full transition-transform duration-300 ${
+            idx === currentService ? 'bg-[#d9764a] scale-125' : 'bg-white/20 hover:bg-white/50'
+          }`}
+          onClick={() => setCurrentService(idx)}
+        />
+      ))}
+    </div>
+  </div>
+
+  {/* Scroll Handler */}
+  <div
+    onWheel={(e) => {
+      const isScrollUp = e.deltaY < 0;
+      setCurrentService((prev) =>
+        isScrollUp
+          ? (prev - 1 + services.length) % services.length
+          : (prev + 1) % services.length
+      );
+    }}
+    className="absolute inset-0 z-50"
+  />
+</section>
+
 
           {/* Newsletter Section - Optimized animations */}
           <motion.section 

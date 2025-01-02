@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NewsletterForm from '../components/NewsLetter';
 import { toast, Toaster } from 'react-hot-toast';
 import CountUp from 'react-countup';
 
 const Home = () => {
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     throttle: 0,
     smooth: 0.1
@@ -28,11 +29,11 @@ const Home = () => {
   const parallax3 = useTransform(smoothProgress, [0, 1], [0, -50]);
 
   const services = [
-    {
-      icon: "💻",
-      title: "Custom Software Development",
-      description: "Tailored solutions to meet your specific business needs and challenges."
-    },
+    // {
+    //   icon: "💻",
+    //   title: "Custom Software Development",
+    //   description: "Tailored solutions to meet your specific business needs and challenges."
+    // },
     {
       icon: "🌐",
       title: "Web Development",
@@ -40,7 +41,7 @@ const Home = () => {
     },
     {
       icon: "📱",
-      title: "Mobile Development",
+      title: "App Development",
       description: "Native and cross-platform mobile applications for iOS and Android."
     },
     {
@@ -50,7 +51,7 @@ const Home = () => {
     },
     {
       icon: "🎨",
-      title: "UI/UX Design",
+      title: "Web Design",
       description: "Creative and intuitive user interfaces that enhance user experience."
     },
     {
@@ -142,6 +143,98 @@ const Home = () => {
     initialY: Math.random() * 100,
     moveRange: Math.random() * 30 + 20,
   }));
+
+  // Add scroll animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 60 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  // Update the services section
+  const handleServiceClick = (service) => {
+    // Navigate to specific service route
+    navigate(`/services/${service.title.toLowerCase().replace(/\s+/g, '-')}`);
+  };
+
+  // Add this new array of projects with size configurations
+  const projects = [
+    { 
+      id: 1, 
+      title: "E-Commerce Platform", 
+      description: "Modern shopping experience with seamless transactions and user-friendly interface", 
+      path: "/projects/e-commerce",
+      size: "large", // takes 2x2 grid space
+      image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 2, 
+      title: "Healthcare App", 
+      description: "Patient management system", 
+      path: "/projects/healthcare",
+      size: "small", // takes 1x1 grid space
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 3, 
+      title: "IoT Dashboard", 
+      description: "Device monitoring system", 
+      path: "/projects/iot",
+      size: "small",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 4, 
+      title: "Financial Dashboard", 
+      description: "Real-time analytics and financial insights", 
+      path: "/projects/finance",
+      size: "medium", // takes 2x1 grid space
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 5, 
+      title: "Social Network", 
+      description: "Community platform", 
+      path: "/projects/social",
+      size: "small",
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 6, 
+      title: "Learning Management", 
+      description: "Educational platform revolutionizing online learning", 
+      path: "/projects/education",
+      size: "medium",
+      image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    { 
+      id: 7, 
+      title: "Cloud Infrastructure", 
+      description: "Scalable and secure cloud solutions", 
+      path: "/projects/cloud",
+      size: "small",
+      image: "https://media.istockphoto.com/id/1669453534/photo/3d-render-cloud-computing-circuit-board-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=jgKabe5sTZmFbj0gHwh5U3Dw5NBa6TQuU1J4plYcAJI="
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
@@ -630,39 +723,93 @@ const Home = () => {
             <div className="max-w-7xl mx-auto px-4">
               <motion.h2 
                 className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                variants={fadeInRight}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
               >
                 Featured Projects
               </motion.h2>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3, 4, 5, 6].map((_, index) => (
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-4 auto-rows-[180px] gap-4"
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {projects.map((project, index) => (
                   <motion.div
                     key={index}
-                    className="group relative overflow-hidden rounded-2xl"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ y: -10 }}
+                    className={`group relative overflow-hidden rounded-3xl cursor-pointer
+                      ${project.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}
+                      ${project.size === 'medium' ? 'md:col-span-2' : ''}
+                      backdrop-blur-sm bg-white/5 border border-white/10
+                    `}
+                    variants={fadeInUp}
+                    onClick={() => navigate(project.path)}
+                    whileHover={{ 
+                      scale: 1.02,
+                      transition: { duration: 0.2 }
+                    }}
                   >
-                    <img 
-                      // src={`/images/project${index + 1}.jpg`}
-                      src={`https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHdlYiUyMHByb2plY3RzfGVufDB8fDB8fHww`}
-                      alt={`Project ${index + 1}`}
-                      className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <h3 className="text-xl font-bold text-white mb-2">Project Title</h3>
-                        <p className="text-gray-300">Brief project description goes here</p>
-                      </div>
+                    {/* Background Image with Gradient Overlay */}
+                    <div className="absolute inset-0">
+                      <img 
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                     </div>
+
+                    {/* Content */}
+                    <div className="relative h-full p-6 flex flex-col justify-end">
+                      {/* Project Icon/Badge */}
+                      <motion.div 
+                        className="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center"
+                        whileHover={{ rotate: 180 }}
+                      >
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </motion.div>
+
+                      {/* Project Info */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileHover={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-gray-300 line-clamp-2">
+                          {project.description}
+                        </p>
+
+                        {/* Tags/Technologies (optional) */}
+                        <div className="flex gap-2 mt-3">
+                          {['React', 'Node.js', 'MongoDB'].map((tech, i) => (
+                            <span 
+                              key={i}
+                              className="text-xs px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white/80"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Hover Effect Overlay */}
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-t from-[#d9764a]/80 to-transparent opacity-0 transition-opacity duration-300"
+                      whileHover={{ opacity: 1 }}
+                    />
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </section>
 
@@ -670,22 +817,27 @@ const Home = () => {
           <section className="relative z-10 py-20 px-4 md:px-6">
             <motion.h2 
               className="text-7xl md:text-9xl font-bold text-white/10 mb-16 text-center overflow-hidden whitespace-nowrap"
-              initial={{ x: "-100%" }}
-              whileInView={{ x: "0%" }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
             >
               Our Services
             </motion.h2>
             
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div 
+              className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               {services.map((service, index) => (
                 <motion.div
                   key={index}
-                  className="group relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl overflow-hidden border border-white/10"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
+                  className="group relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl overflow-hidden border border-white/10 cursor-pointer"
+                  variants={fadeInUp}
+                  onClick={() => handleServiceClick(service)}
                   whileHover={{ 
                     y: -10,
                     boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
@@ -704,7 +856,7 @@ const Home = () => {
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
 
           {/* Newsletter Section - Optimized animations */}
