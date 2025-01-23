@@ -16,7 +16,7 @@ import Careers from './Pages/Careers';
 import Industries from './Pages/Industries';
 
 import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
+// import ScrollToTop from './components/ScrollToTop';
 import Layout from './components/Layout';
 import CustomCursor from './components/CustomCursor';
 
@@ -26,7 +26,7 @@ const App = () => {
     <>
       <CustomCursor />
       <BrowserRouter>
-        <ScrollToTop />
+        {/* <ScrollToTop /> */}
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
