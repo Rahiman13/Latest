@@ -159,8 +159,10 @@ const Navbar = () => {
             whileTap={{ scale: 0.95 }}
             className="hidden lg:block"
           >
-            <Link
-              to="/contact"
+            <a
+              href="https://api.whatsapp.com/send?phone=917995436372"
+              target="_blank"
+              rel="noopener noreferrer"
               className={`px-6 py-2.5 rounded-full font-medium transition-all ${
                 scrolled
                   ? 'bg-gradient-to-r from-[#d9764a] to-[#de7527] text-white shadow-lg hover:shadow-xl hover:brightness-110'
@@ -168,7 +170,7 @@ const Navbar = () => {
               }`}
             >
               Get in Touch
-            </Link>
+            </a>
           </motion.div>
 
           {/* Mobile Menu Button */}

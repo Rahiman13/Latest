@@ -1,10 +1,14 @@
 import React from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useAnimation } from 'framer-motion';
 import CountUp from 'react-countup';
+import { useEffect, useState } from 'react';
+import PageLoader from '../../components/PageLoader';
+import { AnimatePresence } from 'framer-motion';
 
 const AppDev = () => {
   // Scroll and animation setup
   const { scrollYProgress } = useScroll();
+  const [isLoading, setIsLoading] = useState(true);
   
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -62,13 +66,66 @@ const AppDev = () => {
     moveRange: Math.random() * 30 + 20,
   }));
 
+  const controls = useAnimation();
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      // Reset animations when elements are out of view
+      const elements = document.querySelectorAll('.animate-reset');
+      elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const isOutOfView = rect.bottom < 0 || rect.top > window.innerHeight;
+        if (isOutOfView) {
+          controls.start("hidden");
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [controls]);
+
   return (
+    <>
+    <AnimatePresence>
+    {isLoading && <PageLoader />}
+    </AnimatePresence>
     <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
       {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#d9764a] to-[#de7527] origin-left z-50"
         style={{ scaleX: smoothProgress }}
       />
+
+      {/* Add Floating Gradient Orbs */}
+      <div className="fixed inset-0 pointer-events-none">
+        <motion.div
+          className="absolute w-64 h-64 rounded-full bg-[#d9764a]/10 blur-3xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{ top: '20%', left: '10%' }}
+        />
+        <motion.div
+          className="absolute w-96 h-96 rounded-full bg-blue-500/10 blur-3xl"
+          animate={{
+            x: [0, -100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{ bottom: '20%', right: '10%' }}
+        />
+      </div>
 
       {/* Floating Bubbles */}
       <div className="fixed inset-0 pointer-events-none">
@@ -107,14 +164,26 @@ const AppDev = () => {
         style={{
           scale,
           opacity,
-          filter: `blur(${blurValue}px)`
+          filter: `blur(${blurValue}px)`,
+          rotateX: useTransform(smoothProgress, [0, 1], [0, 360])
         }}
       >
+        <div className="absolute inset-0">
+          <img 
+            src="/images/appdev-hero.jpg"
+            alt="App Development"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#19234d]/90 to-[#2b5a9e]/90" />
+        </div>
         <div className="relative container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.8 }}
+            className="animate-reset"
+            animate={controls}
           >
             <h1 className="text-7xl md:text-9xl font-bold mb-8">
               <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
@@ -127,6 +196,17 @@ const AppDev = () => {
             <p className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto mb-12">
               Creating powerful mobile experiences that engage and delight users
             </p>
+            
+            {/* Add Animated scroll indicator */}
+            <motion.div 
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+                <div className="w-2 h-2 bg-white rounded-full mt-2"></div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </motion.section>
@@ -149,7 +229,7 @@ const AppDev = () => {
                   rotate: [0, 5, -5, 0],
                   transition: { duration: 0.5 }
                 }}
-                viewport={{ once: true }}
+                viewport={{ margin: "-100px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <CountUp 
@@ -159,6 +239,9 @@ const AppDev = () => {
                   separator="," 
                   suffix={stat.suffix}
                   className="text-5xl md:text-6xl font-bold text-white mb-2"
+                  enableScrollSpy={true}
+                  scrollSpyOnce={false}
+                  scrollSpyDelay={0}
                 />
                 <p className="text-gray-300">{stat.label}</p>
               </motion.div>
@@ -177,7 +260,7 @@ const AppDev = () => {
             className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ margin: "-100px" }}
           >
             Our Expertise
           </motion.h2>
@@ -195,7 +278,7 @@ const AppDev = () => {
             }}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true }}
+            viewport={{ margin: "-100px" }}
           >
             {features.map((feature, index) => (
               <motion.div
@@ -224,7 +307,120 @@ const AppDev = () => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Technologies Section */}
+      <section className="py-20 relative z-10 overflow-hidden">
+        <motion.div 
+          className="max-w-7xl mx-auto px-4"
+          style={{ y: parallax2 }}
+        >
+          <motion.h2 
+            className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ margin: "-100px" }}
+          >
+            Technologies We Use
+          </motion.h2>
+
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ margin: "-100px" }}
+          >
+            {[
+              { icon: "/icons/react-native.svg", name: "React Native" },
+              { icon: "/icons/flutter.svg", name: "Flutter" },
+              { icon: "/icons/swift.svg", name: "Swift" },
+              { icon: "/icons/kotlin.svg", name: "Kotlin" },
+              { icon: "/icons/firebase.svg", name: "Firebase" },
+              { icon: "/icons/aws-mobile.svg", name: "AWS Mobile" },
+              { icon: "/icons/android.svg", name: "Android" },
+              { icon: "/icons/ios.svg", name: "iOS" }
+            ].map((tech, index) => (
+              <motion.div
+                key={index}
+                className="bg-white/5 backdrop-blur-lg rounded-xl p-6 flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+              >
+                <img src={tech.icon} alt={tech.name} className="w-16 h-16 mb-4" />
+                <p className="text-white font-medium">{tech.name}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-20 relative z-10">
+        <motion.div 
+          className="max-w-7xl mx-auto px-4"
+          style={{ y: parallax3 }}
+        >
+          <motion.h2 
+            className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ margin: "-100px" }}
+          >
+            Our Development Process
+          </motion.h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { number: "01", title: "Planning", description: "Detailed app requirements and user journey mapping" },
+              { number: "02", title: "Design", description: "Creating intuitive and engaging mobile UI/UX" },
+              { number: "03", title: "Development", description: "Native and cross-platform app development" },
+              { number: "04", title: "Launch", description: "App store optimization and deployment" }
+            ].map((step, index) => (
+              <motion.div
+                key={index}
+                className="relative p-8 border border-white/10 rounded-2xl"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.2 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="text-6xl font-bold text-white/10 absolute -top-8 -left-4">
+                  {step.number}
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">{step.title}</h3>
+                <p className="text-gray-300">{step.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 relative z-10">
+        <motion.div 
+          className="max-w-4xl mx-auto px-4 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+            Ready to Build Your App?
+          </h2>
+          <p className="text-xl text-gray-300 mb-12">
+            Let's turn your app idea into a successful mobile solution.
+          </p>
+          <motion.button
+            className="bg-gradient-to-r from-[#d9764a] to-[#de7527] text-white px-8 py-4 rounded-full text-lg font-semibold"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Get Started
+          </motion.button>
+        </motion.div>
+      </section>
     </div>
+    </>
   );
 };
 

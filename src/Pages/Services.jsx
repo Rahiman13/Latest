@@ -1,23 +1,74 @@
-import React from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import CountUp from 'react-countup';
+import PageLoader from '../components/PageLoader';
 
 const Services = () => {
-    const { scrollYProgress } = useScroll();
+    const [isLoading, setIsLoading] = useState(true);
+    const { scrollYProgress } = useScroll({
+        offset: ["start start", "end end"]
+    });
 
     const smoothProgress = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
+        stiffness: 200,
+        damping: 25,
+        mass: 0.1,
         restDelta: 0.001
     });
 
-    const scale = useTransform(smoothProgress, [0, 0.2], [1, 1.5]);
+    // Optimized transformations
+    const scale = useTransform(smoothProgress, [0, 0.2], [1, 1.1]);
     const opacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
-    const blurValue = useTransform(smoothProgress, [0, 0.2], [0, 10]);
+    const blurValue = useTransform(smoothProgress, [0, 0.2], [0, 4]);
 
-    const parallax1 = useTransform(smoothProgress, [0, 1], [0, -300]);
+    // Smoother parallax
+    const parallax1 = useTransform(smoothProgress, [0, 1], [0, -200]);
     const parallax2 = useTransform(smoothProgress, [0, 1], [0, -150]);
     const parallax3 = useTransform(smoothProgress, [0, 1], [0, -75]);
+
+    // Animation variants
+    const fadeInUp = {
+        hidden: { 
+            opacity: 0, 
+            y: 30,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 20
+            }
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 20
+            }
+        }
+    };
+
+    const staggerContainer = {
+        hidden: { 
+            opacity: 0,
+            transition: {
+                when: "afterChildren"
+            }
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+                delayChildren: 0.1
+            }
+        }
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsLoading(false), 2000);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Updated services data with detailed content from HTML files
     const services = [
@@ -146,6 +197,10 @@ const Services = () => {
     ];
 
     return (
+        <>
+        <AnimatePresence>
+            {isLoading && <PageLoader />}
+        </AnimatePresence>
         <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
             {/* Progress Bar */}
             <motion.div
@@ -194,33 +249,38 @@ const Services = () => {
                 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#19234d]/90 to-[#2b5a9e]/90" />
-                <div className="relative container mx-auto px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                <motion.div 
+                    className="relative container mx-auto px-4 text-center"
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <motion.h1 
+                        className="text-7xl md:text-9xl font-bold mb-8"
+                        variants={fadeInUp}
                     >
-                        <h1 className="text-7xl md:text-9xl font-bold mb-8">
-                            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                Our Services
-                            </span>
-                        </h1>
-                        <p className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto mb-12">
-                            Innovative solutions for your digital transformation journey
-                        </p>
+                        <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                            Our Services
+                        </span>
+                    </motion.h1>
+                    <motion.p 
+                        className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto mb-12"
+                        variants={fadeInUp}
+                    >
+                        Innovative solutions for your digital transformation journey
+                    </motion.p>
 
-                        {/* Animated scroll indicator */}
-                        <motion.div
-                            className="absolute bottom-[1px] left-1/2 transform -translate-x-1/2"
-                            animate={{ y: [0, 10, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                        >
-                            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-                                <div className="w-2 h-2 bg-white rounded-full mt-2"></div>
-                            </div>
-                        </motion.div>
+                    {/* Animated scroll indicator */}
+                    <motion.div
+                        className="absolute bottom-[1px] left-1/2 transform -translate-x-1/2"
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full mt-2"></div>
+                        </div>
                     </motion.div>
-                </div>
+                </motion.div>
             </motion.section>
 
             {/* Enhanced Stats Section with Animations */}
@@ -236,7 +296,7 @@ const Services = () => {
                                 className="text-center"
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
+                                viewport={{ amount: 0.3 }}
                                 transition={{
                                     duration: 0.5,
                                     delay: index * 0.1,
@@ -253,7 +313,7 @@ const Services = () => {
                                         duration={stat.duration}
                                         suffix={stat.suffix}
                                         enableScrollSpy
-                                        scrollSpyOnce
+                                        scrollSpyDelay={100}
                                     />
                                 </motion.h3>
                                 <p className="text-gray-300">{stat.label}</p>
@@ -264,91 +324,42 @@ const Services = () => {
             </section>
 
             {/* Zigzag Service Sections */}
-            {services.map((service, index) => (
-                <motion.section
-                    key={index}
-                    className="relative py-20"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+            <motion.section 
+                className="relative py-20 px-4"
+                style={{ y: parallax2 }}
+            >
+                <motion.div
+                    className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ amount: 0.2 }}
                 >
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className={`grid md:grid-cols-2 gap-16 items-center ${index % 2 === 0 ? '' : 'md:grid-flow-dense'}`}>
-                            {/* Image Column */}
-                            <motion.div
-                                className={`relative ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}
-                                initial={{ x: index % 2 === 0 ? -100 : 100, opacity: 0 }}
-                                whileInView={{ x: 0, opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                            >
-                                <div className="relative group overflow-hidden rounded-2xl shadow-2xl">
-                                    <img
-                                        src={service.details.image}
-                                        alt={service.title}
-                                        className="w-full h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-                                </div>
-                            </motion.div>
-
-                            {/* Content Column */}
-                            <motion.div
-                                className={`${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}
-                                initial={{ x: index % 2 === 0 ? 100 : -100, opacity: 0 }}
-                                whileInView={{ x: 0, opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
-                            >
-                                <div className="space-y-8">
-                                    <motion.div
-                                        className="text-7xl"
-                                        whileHover={{ scale: 1.2, rotate: 5 }}
-                                    >
-                                        {service.icon}
-                                    </motion.div>
-                                    
-                                    <div>
-                                        <h3 className="text-4xl font-bold text-white mb-4">{service.title}</h3>
-                                        <p className="text-gray-300 text-lg leading-relaxed">{service.description}</p>
-                                    </div>
-                                    
-                                    {/* Features List */}
-                                    <div className="space-y-4">
-                                        {service.details.features.map((feature, idx) => (
-                                            <motion.div
-                                                key={idx}
-                                                className="flex items-center space-x-3 bg-white/5 backdrop-blur-sm rounded-lg p-3"
-                                                initial={{ opacity: 0, x: -20 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: idx * 0.1 }}
-                                                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-                                            >
-                                                <span className="text-green-400 text-xl">✓</span>
-                                                <span className="text-gray-200">{feature}</span>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-
-                                    <p className="text-gray-400 italic border-l-4 border-[#d9764a] pl-4">
-                                        {service.details.additionalInfo}
-                                    </p>
-
-                                    <motion.button
-                                        className="px-8 py-4 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full text-white font-semibold shadow-lg hover:shadow-[#d9764a]/50 transition-shadow"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        Learn More
-                                    </motion.button>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </motion.section>
-            ))}
+                    {services.map((service, index) => (
+                        <motion.div
+                            key={index}
+                            className="group relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl overflow-hidden border border-white/10"
+                            variants={fadeInUp}
+                            whileHover={{
+                                y: -10,
+                                boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+                            }}
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="relative z-10">
+                                <motion.div
+                                    className="text-6xl mb-6"
+                                    whileHover={{ scale: 1.2, rotate: 5 }}
+                                >
+                                    {service.icon}
+                                </motion.div>
+                                <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
+                                <p className="text-gray-300">{service.description}</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </motion.section>
 
             {/* Process Section */}
             <section className="py-10 mt-56 px-4">
@@ -360,7 +371,8 @@ const Services = () => {
                         className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.5 }}
                     >
                         Our Process
                     </motion.h2>
@@ -372,8 +384,13 @@ const Services = () => {
                                 className="relative"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.2 }}
+                                viewport={{ amount: 0.3 }}
+                                transition={{ 
+                                    delay: index * 0.2,
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 20
+                                }}
                             >
                                 <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
                                     <motion.div
@@ -394,6 +411,7 @@ const Services = () => {
                 </motion.div>
             </section>
         </div>
+        </>
     );
 };
 

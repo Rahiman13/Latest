@@ -29,8 +29,141 @@
   animation: gradient 5s ease infinite;
 }
 
-/* Better Font Rendering */
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Cursor Styles */
+.custom-cursor {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(217, 118, 74, 0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  will-change: transform, width, height, opacity;
+  backdrop-filter: blur(1px);
+}
+
+.custom-cursor::before,
+.custom-cursor::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #d9764a, #de7527, #2b5a9e, #19234d, #d9764a) border-box;
+  background-size: 400% 400%;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0.9;
+}
+
+.custom-cursor::before {
+  animation: rotate 4s linear infinite, moveGradient 6s ease infinite;
+  filter: blur(0.8px);
+}
+
+.custom-cursor::after {
+  animation: rotate 4s linear infinite reverse, moveGradient 6s ease infinite reverse;
+  filter: blur(0.8px);
+  opacity: 0.6;
+}
+
+.custom-cursor-dot {
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(45deg, #d9764a, #de7527);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 25px rgba(217, 118, 74, 0.6);
+  will-change: transform;
+}
+
+/* Hover effects */
+.cursor-hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.cursor-hover::before,
+.cursor-hover::after {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-dot-hover {
+  width: 40px;
+  height: 40px;
+  background: rgba(217, 118, 74, 0.1);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(217, 118, 74, 0.7);
+  transform: translate(-50%, -50%);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes moveGradient {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Hide default cursor */
+* {
+  cursor: none !important;
+}
+
+/* Show default cursor on touch devices */
+@media (hover: none) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none;
+  }
+  
+  * {
+    cursor: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #d9764a, #de7527);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #de7527, #d9764a);
 }

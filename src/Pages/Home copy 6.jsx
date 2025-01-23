@@ -581,9 +581,9 @@ const Home = () => {
               <div className="max-w-7xl mx-auto px-4">
                 <motion.h2
                   className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ amount: 0.5 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ amount: 0.3 }}
                   transition={{ duration: 0.6 }}
                 >
                   Why Choose Us
@@ -631,7 +631,7 @@ const Home = () => {
                   <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
+                    viewport={{ amount: 0.3 }}
                     className="relative"
                   >
                     <img
@@ -647,7 +647,7 @@ const Home = () => {
                   <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
+                    viewport={{ amount: 0.3 }}
                   >
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                       Transforming Ideas into Digital Success Stories
@@ -674,9 +674,9 @@ const Home = () => {
               <div className="max-w-7xl mx-auto px-4">
                 <motion.h2
                   className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ amount: 0.5 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ amount: 0.3 }}
                   transition={{ duration: 0.6 }}
                 >
                   Our Process
@@ -689,7 +689,7 @@ const Home = () => {
                       className="relative"
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ amount: 0.5 }}
+                      viewport={{ amount: 0.3 }}
                       transition={{ delay: index * 0.2 }}
                     >
                       <div className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden">
@@ -723,9 +723,9 @@ const Home = () => {
               <div className="max-w-7xl mx-auto px-4">
                 <motion.h2
                   className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ amount: 0.5 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ amount: 0.3 }}
                   transition={{ duration: 0.6 }}
                 >
                   Client Success Stories
@@ -738,7 +738,7 @@ const Home = () => {
                       className="relative group h-full"
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ amount: 0.5 }}
+                      viewport={{ amount: 0.3 }}
                       transition={{ delay: index * 0.2 }}
                     >
                       {/* Card container with hover effects */}
@@ -865,7 +865,7 @@ const Home = () => {
                   variants={fadeInRight}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ amount: 0.5 }}
+                  viewport={{ amount: 0.3 }}
                 >
                   Featured Projects
                 </motion.h2>
@@ -875,7 +875,7 @@ const Home = () => {
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ amount: 0.5 }}
+                  viewport={{ amount: 0.3 }}
                 >
                   {projects.map((project, index) => (
                     <motion.div
@@ -959,7 +959,7 @@ const Home = () => {
                 variants={fadeInLeft}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ amount: 0.5 }}
+                viewport={{ amount: 0.3 }}
               >
                 Our Services
               </motion.h2>
@@ -969,7 +969,7 @@ const Home = () => {
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ amount: 0.5 }}
+                viewport={{ amount: 0.3 }}
               >
                 {services.map((service, index) => (
                   <motion.div
@@ -1002,14 +1002,14 @@ const Home = () => {
             <motion.section
               className="relative py-32 px-4 md:px-6 overflow-hidden"
               initial={{ opacity: 0 }}
-              whileInView={{
+              whileInView={{ 
                 opacity: 1,
                 transition: {
                   duration: 0.4,
                   ease: "easeOut"
                 }
               }}
-              viewport={{
+              viewport={{ 
                 amount: 0.3,
                 margin: "-50px"
               }}
@@ -1052,7 +1052,7 @@ const Home = () => {
                   <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
+                    viewport={{ amount: 0.3 }}
                     transition={{ duration: 0.4 }}
                     className="text-center lg:text-left"
                   >
@@ -1060,7 +1060,7 @@ const Home = () => {
                       className="text-5xl md:text-6xl font-bold mb-6"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ amount: 0.5 }}
+                      viewport={{ amount: 0.3 }}
                       transition={{ duration: 0.3 }}
                     >
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
@@ -1075,7 +1075,7 @@ const Home = () => {
                       className="text-xl text-gray-300 mb-8"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
-                      viewport={{ amount: 0.5 }}
+                      viewport={{ amount: 0.3 }}
                       transition={{ duration: 0.3 }}
                     >
                       Join our newsletter and get exclusive insights, industry updates,
@@ -1087,7 +1087,7 @@ const Home = () => {
                       className="grid grid-cols-2 gap-6 mt-12"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
-                      viewport={{ amount: 0.5 }}
+                      viewport={{ amount: 0.3 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="text-center lg:text-left">
@@ -1105,7 +1105,7 @@ const Home = () => {
                   <motion.div
                     initial={{ opacity: 0, x: 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
+                    viewport={{ amount: 0.3 }}
                     transition={{ duration: 0.4 }}
                     className="relative"
                   >
