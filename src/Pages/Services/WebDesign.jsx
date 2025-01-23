@@ -4,7 +4,6 @@ import CountUp from 'react-countup';
 import PageLoader from '../../components/PageLoader';
 import { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { useResetAnimation } from '../../hooks/useResetAnimation';
 
 const WebDesign = () => {
   // Scroll and animation setup
@@ -109,23 +108,6 @@ const WebDesign = () => {
       image: "/portfolio3.jpg"
     }
   ];
-
-  const featureAnimation = {
-    hidden: { 
-      opacity: 0, 
-      y: 30 
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const controls = useResetAnimation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -278,11 +260,10 @@ const WebDesign = () => {
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 animate-reset"
-                variants={featureAnimation}
-                initial="hidden"
-                animate={controls}
-                custom={index}
+                className="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: "-100px" }}
                 transition={{ delay: index * 0.2 }}
                 whileHover={{ 
                   y: -10,
@@ -308,16 +289,16 @@ const WebDesign = () => {
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                className="text-center animate-reset"
-                variants={featureAnimation}
-                initial="hidden"
-                animate={controls}
-                custom={index}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ 
-                  scale: 1.1,
-                  rotate: [0, 5, -5, 0],
-                  transition: { duration: 0.5 }
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ margin: "-100px" }}
+                transition={{ 
+                  duration: 0.5, 
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20
                 }}
               >
                 <CountUp 

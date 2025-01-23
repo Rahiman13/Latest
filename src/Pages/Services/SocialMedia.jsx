@@ -4,7 +4,6 @@ import CountUp from 'react-countup';
 import { useEffect, useState } from 'react';
 import PageLoader from '../../components/PageLoader';
 import { AnimatePresence } from 'framer-motion';
-import { useResetAnimation } from '../../hooks/useResetAnimation';
 
 const SocialMedia = () => {
   // Scroll and animation setup
@@ -70,29 +69,30 @@ const SocialMedia = () => {
     moveRange: Math.random() * 30 + 20,
   }));
 
-  const controls = useResetAnimation();
+  const controls = useAnimation();
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const elements = document.querySelectorAll('.animate-reset');
+      elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const isOutOfView = rect.bottom < 0 || rect.top > window.innerHeight;
+        if (isOutOfView) {
+          controls.start("hidden");
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [controls]);
 
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
   }, []);
-
-  const statsAnimation = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.5 
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut"
-      }
-    }
-  };
 
   return (
     <>
@@ -230,16 +230,16 @@ const SocialMedia = () => {
                 <motion.div
                   key={index}
                   className="text-center animate-reset"
-                  variants={statsAnimation}
-                  initial="hidden"
-                  animate={controls}
-                  custom={index}
-                  transition={{ delay: index * 0.1 }}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   whileHover={{ 
                     scale: 1.1,
                     rotate: [0, 5, -5, 0],
                     transition: { duration: 0.5 }
                   }}
+                  viewport={{ amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  animate={controls}
                 >
                   <CountUp 
                     start={0} 
