@@ -183,7 +183,7 @@ const useResetAnimation = (controls) => {
     return () => observer.disconnect();
   }, [controls]);
 };
-
+  
 const Footer = () => {
   const controls = useAnimation();
   useResetAnimation(controls);
@@ -245,11 +245,8 @@ const Footer = () => {
           animate={controls}
         >
           <FooterGrid>
-            <motion.div 
-              variants={fadeInUp}
-              className="animate-section"
-              animate={controls}
-            >
+            <motion.div variants={fadeInUp}>
+              {/* <div className="flex items-center space-x-2 mb-4"> */}
               <Link to="/" className="flex items-center space-x-2">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
@@ -277,11 +274,7 @@ const Footer = () => {
               </ContactInfo>
             </motion.div>
 
-            <motion.div 
-              variants={fadeInUp}
-              className="animate-section"
-              animate={controls}
-            >
+            <motion.div variants={fadeInUp}>
               <SectionTitle>QUICK LINKS</SectionTitle>
               <FooterLinks>
                 {quickLinks.map((link, index) => (
@@ -294,11 +287,7 @@ const Footer = () => {
               </FooterLinks>
             </motion.div>
 
-            <motion.div 
-              variants={fadeInUp}
-              className="animate-section"
-              animate={controls}
-            >
+            <motion.div variants={fadeInUp}>
               <SectionTitle>SERVICES</SectionTitle>
               <FooterLinks>
                 {serviceLinks.map((link, index) => (
@@ -311,11 +300,7 @@ const Footer = () => {
               </FooterLinks>
             </motion.div>
 
-            <motion.div 
-              variants={fadeInUp}
-              className="animate-section"
-              animate={controls}
-            >
+            <motion.div variants={fadeInUp}>
               <SectionTitle>GET IN TOUCH</SectionTitle>
               <NewsletterText>Stay updated with our latest news and offers</NewsletterText>
               <SocialIcons>
