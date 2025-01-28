@@ -16,7 +16,7 @@ import Careers from './Pages/Careers';
 import Industries from './Pages/Industries';
 
 import Footer from './components/Footer';
-// import ScrollToTop from './components/ScrollToTop';
+import ScrollProgress from './components/ScrollProgress';
 import Layout from './components/Layout';
 import CustomCursor from './components/CustomCursor';
 

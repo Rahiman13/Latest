@@ -6,12 +6,6 @@ import { toast, Toaster } from 'react-hot-toast';
 import CountUp from 'react-countup';
 import PageLoader from '../components/PageLoader';
 import { AnimatePresence } from 'framer-motion';
-import { FaReact, FaNodeJs, FaAws, FaDocker, FaDatabase } from 'react-icons/fa';
-import { SiTypescript, SiJavascript, SiMongodb } from 'react-icons/si';
-import Lottie from 'lottie-react';
-// import digitalTransformationAnimation from '../assets/Home-Hero-section.json'; // You'll need to add this animation file
-import digitalTransformationAnimation from '../assets/Home-Hero2.json'; // You'll need to add this animation file
-import { useInView as useInViewObserver } from 'react-intersection-observer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -59,7 +53,7 @@ const Home = () => {
       title: "App Development",
       description: "Native and cross-platform mobile applications for iOS and Android."
     },
-
+    
     {
       icon: "🎯",
       title: "Digital Marketing",
@@ -147,18 +141,6 @@ const Home = () => {
       author: "Emma Williams",
       position: "Marketing Director, Growth Co",
       image: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZmZXNpb25hbCUyMHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D"
-    },
-    {
-      text: "Their cybersecurity solutions have been invaluable in protecting our business from potential threats.",
-      author: "John Doe",
-      position: "CEO, SecureTech",
-      image: "https://images.unsplash.com/photo-1580455561444-8a5f2d0a5f4a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHByb2ZmZXNpb25hbCUyMHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D"
-    },
-    {
-      text: "The team at Projexino Solutions is always available to help and provide guidance. Their customer support is top-notch.",
-      author: "Jane Smith",
-      position: "Operations Manager, TechCorp",
-      image: "https://images.unsplash.com/photo-1580455561444-8a5f2d0a5f4a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHByb2ZmZXNpb25hbCUyMHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D"
     }
   ];
 
@@ -314,7 +296,7 @@ const Home = () => {
         const currentScrollY = window.scrollY;
         const direction = currentScrollY > lastScrollY ? 'down' : 'up';
         lastScrollY = currentScrollY;
-
+        
         // Handle scroll-based animations here
         document.documentElement.style.setProperty('--scroll-y', `${currentScrollY}px`);
         document.documentElement.setAttribute('data-scroll-direction', direction);
@@ -347,8 +329,8 @@ const Home = () => {
               opacity: 0.3
             }}
             animate={{
-              y: [-bubble.moveRange / 6, bubble.moveRange / 6],  // Reduced range
-              x: [-bubble.moveRange / 8, bubble.moveRange / 8],  // Reduced range
+              y: [-bubble.moveRange/6, bubble.moveRange/6],  // Reduced range
+              x: [-bubble.moveRange/8, bubble.moveRange/8],  // Reduced range
             }}
             transition={{
               duration: bubble.duration * 3,
@@ -526,28 +508,120 @@ const Home = () => {
     const subLetters = Array.from(subText);
 
     return (
-      <section className="relative py-12 overflow-hidden">
+      <section className="relative py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 relative">
-          <ServicesHeading />
+          <motion.div
+            className="perspective-1000 mb-20 relative"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {/* Background Text */}
+            <motion.h2
+              className="text-[12rem] md:text-[16rem] font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              style={{
+                WebkitTextStroke: "1px rgba(217,118,74,0.1)",
+                color: "transparent",
+              }}
+            >
+              Services
+            </motion.h2>
 
-          {/* Decorative Lines */}
-          <div className="absolute top-52 left-0 bottom-0 right-0 flex justify-center gap-4">
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
-                animate={{
-                  scaleX: [1, 1.5, 1],
-                  opacity: [0.5, 1, 0.5],
+            {/* Animated Letters Container */}
+            <motion.h2
+              className="text-8xl md:text-9xl font-bold text-center relative flex justify-center gap-x-3 flex-wrap"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {mainLetters.map((letter, index) => (
+                <motion.span
+                  key={index}
+                  className={`inline-block ${letter === " " ? "w-8" : ""
+                    } bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]`}
+                  initial={{ opacity: 0, y: 100, rotateX: 90 }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    rotateX: 0,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                  whileHover={{
+                    scale: 1.2,
+                    textShadow: "0 0 20px rgba(217,118,74,0.5)",
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+              <motion.span
+                className="inline-block w-8"
+                initial={{ opacity: 0, y: 100, rotateX: 90 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  rotateX: 0,
                 }}
                 transition={{
-                  duration: 2,
-                  delay: i * 0.2,
-                  repeat: Infinity,
+                  duration: 0.5,
+                  delay: mainLetters.length * 0.1,
+                  type: "spring",
+                  stiffness: 100,
                 }}
-              />
-            ))}
-          </div>
+              >
+                &nbsp;
+              </motion.span>
+              {subLetters.map((letter, index) => (
+                <motion.span
+                  key={index}
+                  className={`inline-block ${letter === " " ? "w-8" : ""
+                    } bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]`}
+                  initial={{ opacity: 0, y: 100, rotateX: 90 }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    rotateX: 0,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    delay: (mainLetters.length + 1) * 0.1 + index * 0.1,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                  whileHover={{
+                    scale: 1.2,
+                    textShadow: "0 0 20px rgba(217,118,74,0.5)",
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </motion.h2>
+
+            {/* Decorative Lines */}
+            <div className="absolute top-36 left-0 bottom-0 right-0 flex justify-center gap-4">
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
+                  animate={{
+                    scaleX: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: i * 0.2,
+                    repeat: Infinity,
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -633,172 +707,192 @@ const Home = () => {
 
   const HeroSection = () => {
     return (
-      <motion.section className="relative min-h-screen flex items-center overflow-hidden">
+      <motion.section className="min-h-screen relative flex items-center px-4 overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 ">
-          {/* Animated Code Rain Effect */}
-          {/* <div className="absolute inset-0 opacity-20">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-sm text-[#4CAF50] whitespace-nowrap"
-                initial={{ y: -100, x: Math.random() * 100 + '%' }}
-                animate={{
-                  y: '100vh',
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2
-                }}
-              >
-                {'{code}'}
-              </motion.div>
-            ))}
-          </div> */}
+        <div className="absolute inset-0">
+          {/* <div className="absolute inset-0 bg-gradient-to-br from-[#19234d]/90 via-[#2b5a9e]/60 to-[#19234d]/90" /> */}
 
-          {/* Floating Tech Icons */}
-          <div className="absolute inset-0">
-            {[
-              { icon: FaReact, color: '#FF69B4', position: { top: '50%', right: '5%' } },
-              { icon: SiJavascript, color: '#FFD700', position: { bottom: '5%', right: '10%' } },
-              // { icon: SiTypescript, color: '#007ACC', position: { bottom: '25%', right: '45%' } },
-              // { icon: FaAws , color: '#33CC33', position: { top: '20%', right: '15%' } },
-              { icon: FaNodeJs, color: '#FFA07A', position: { top: '20%', right: '40%' } },
-              { icon: FaDatabase, color: '#007BFF', position: { bottom: '8%', right: '25%' } },
-              { icon: SiMongodb, color: '#3FA037', position: { bottom: '40%', right: '43%' } },
-              // { icon: FaDocker, color: '#008080', position: { top: '30%', right: '10%' } }
-            ].map((tech, i) => {
-              const Icon = tech.icon;
-              return (
-                <motion.div
-                  key={i}
-                  className="absolute"
-                  style={{
-                    ...tech.position,
-                    color: tech.color,
-                    opacity: 0.2
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    // rotate: [0, 360],
-                    scale: [1, 1.2, 1]
-                  }}
-                  transition={{
-                    duration: 5 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: i * 0.5
-                  }}
-                >
-                  <Icon size={50} /> {/* Changed size to 50 for all icons */}
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* Animated particles */}
+          {/* {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-2 w-2 bg-white/30 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.3, 0.8, 0.3],
+                y: [0, -50, 0],
+              }}
+              transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            />
+          ))} */}
         </div>
 
-        {/* Main Content */}
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Left Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-left"
+          >
+            <motion.h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold mb-6">
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                We Build
+              </span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527] leading-tight">
+                Digital Excellence
+              </span>
+            </motion.h1>
+
+            <motion.p
+              className="text-xl text-gray-300 mb-8 max-w-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
             >
-              <motion.div className="mb-6 flex items-center space-x-2">
-                <div className="h-1 w-12 bg-[#d9764a]" />
-                <span className="text-[#d9764a] font-semibold">INNOVATIVE SOLUTIONS</span>
-              </motion.div>
+              Transform your business with cutting-edge software solutions that drive growth,
+              innovation, and success in the digital age.
+            </motion.p>
 
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6">
-                <motion.span
-                  className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  Transforming Ideas
-                </motion.span>
-                <motion.span
-                  className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527] leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  Into Digital Reality
-                </motion.span>
-              </h1>
-
-              <motion.p
-                className="text-lg text-gray-300 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                We craft cutting-edge software solutions that empower businesses
-                to thrive in the digital age. From web applications to cloud
-                infrastructure, we bring your vision to life.
-              </motion.p>
-
-              <motion.div
-                className="flex gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                <button className="px-8 py-3 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-lg text-white font-semibold hover:scale-105 transition-transform flex items-center gap-2">
-                  Start Project
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    →
-                  </motion.span>
-                </button>
-                <button className="px-8 py-3 border border-[#d9764a]/30 rounded-lg text-white font-semibold hover:bg-[#d9764a]/10 transition-colors">
-                  Our Services
-                </button>
-              </motion.div>
+            {/* CTA Buttons */}
+            <motion.div
+              className="flex gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <button className="px-8 py-3 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full text-white font-semibold hover:scale-105 transition-transform">
+                Get Started
+              </button>
+              <button className="px-8 py-3 border border-white/20 rounded-full text-white font-semibold hover:bg-white/10 transition-all">
+                Learn More
+              </button>
             </motion.div>
+          </motion.div>
 
-            {/* Right Content - Lottie Animation */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="relative w-full aspect-square max-w-[600px] mx-auto">
-                <Lottie
-                  animationData={digitalTransformationAnimation}
-                  loop={true}
-                  autoplay={true}
-                  className="w-full h-full"
+          {/* Right Content - Bulb with Floating Icons */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Bulb Shape Container */}
+            <div className="relative w-[400px] h-[500px] mx-auto">
+              {/* Bulb Glass Effect */}
+              <motion.div
+                className="absolute inset-0 morph-shape"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  clipPath: `path('M200 0
+                    C 130 0, 80 50, 80 120
+                    C 80 200, 80 300, 80 380
+                    C 80 450, 320 450, 320 380
+                    C 320 300, 320 200, 320 120
+                    C 320 50, 270 0, 200 0 Z')`
+                }}
+                animate={{
+                  boxShadow: [
+                    '0 0 20px rgba(217,118,74,0.2)',
+                    '0 0 40px rgba(217,118,74,0.4)',
+                    '0 0 20px rgba(217,118,74,0.2)'
+                  ]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+
+              {/* Bulb Content */}
+              <motion.div
+                className="relative z-20 w-full h-full flex items-center justify-center"
+                animate={{ y: [-10, 10, -10] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGlkZWElMjB0byUyMGRpZ2l0YWwlMjBzdWNjZXNzfGVufDB8fDB8fHww"
+                  alt="Innovation"
+                  className="w-full h-full object-cover rounded-[100px] opacity-90"
                 />
 
-                {/* Floating Stats */}
-                <motion.div
-                  className="absolute -left-10 top-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <div className="text-2xl font-bold text-white">250+</div>
-                  <div className="text-sm text-gray-300">Projects Delivered</div>
-                </motion.div>
+                {/* Inner Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#d9764a]/20 to-transparent rounded-[100px] blur-xl" />
+              </motion.div>
 
-                <motion.div
-                  className="absolute -right-5 bottom-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                >
-                  <div className="text-2xl font-bold text-white">99%</div>
-                  <div className="text-sm text-gray-300">Client Satisfaction</div>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
+              {/* Bulb Base */}
+              <motion.div
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-16 bg-gradient-to-b from-[#d9764a]/30 to-[#d9764a]/10"
+                style={{
+                  borderRadius: '0 0 20px 20px',
+                  backdropFilter: 'blur(5px)'
+                }}
+              />
+            </div>
+
+            {/* Floating Icons Around Bulb */}
+            {[
+              { icon: "💡", position: { top: '5%', left: '-20%' } },
+              { icon: "⚡", position: { top: '20%', right: '-20%' } },
+              { icon: "🚀", position: { top: '40%', left: '-25%' } },
+              { icon: "💻", position: { bottom: '30%', right: '-15%' } },
+              { icon: "🎯", position: { bottom: '10%', left: '-10%' } },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className="absolute text-4xl"
+                style={item.position}
+                animate={{
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1],
+                  filter: [
+                    'drop-shadow(0 0 10px rgba(217,118,74,0.3))',
+                    'drop-shadow(0 0 20px rgba(217,118,74,0.6))',
+                    'drop-shadow(0 0 10px rgba(217,118,74,0.3))'
+                  ]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: index * 0.5
+                }}
+              >
+                {item.icon}
+              </motion.div>
+            ))}
+
+            {/* Orbital Rings */}
+            {[...Array(3)].map((_, index) => (
+              <motion.div
+                key={index}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10"
+                style={{
+                  width: `${400 + (index * 100)}px`,
+                  height: `${400 + (index * 100)}px`,
+                }}
+                animate={{
+                  rotate: [0, 360]
+                }}
+                transition={{
+                  duration: 20 + (index * 5),
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+            ))}
+          </motion.div>
         </div>
       </motion.section>
     );
@@ -838,7 +932,7 @@ const Home = () => {
         duration: 15,
         repeat: Infinity,
         ease: "linear"
-      } 
+      }
     }
   };
 
@@ -933,8 +1027,9 @@ const Home = () => {
                   style={{
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
-                    background: `radial-gradient(circle at center, ${i % 2 ? '#d9764a20' : '#2b5a9e20'
-                      }, transparent)`,
+                    background: `radial-gradient(circle at center, ${
+                      i % 2 ? '#d9764a20' : '#2b5a9e20'
+                    }, transparent)`,
                   }}
                   animate={{
                     scale: [1, 1.5, 1],
@@ -970,16 +1065,32 @@ const Home = () => {
                   }}
                 >
                   <span className="relative inline-block">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300">
+                    {/* Letter with gradient */}
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]">
                       {letter}
                     </span>
+                    
+                    {/* Glowing effect */}
+                    <motion.span
+                      className="absolute inset-0 bg-clip-text text-transparent bg-white blur-sm"
+                      animate={{
+                        opacity: [0, 0.5, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        delay: index * 0.2,
+                        repeat: Infinity,
+                      }}
+                    >
+                      {letter}
+                    </motion.span>
                   </span>
                 </motion.span>
               ))}
             </motion.div>
 
             {/* Sub Title - "Projects" */}
-            <motion.div
+            <motion.div 
               className="flex justify-center gap-x-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -1002,12 +1113,11 @@ const Home = () => {
                   }}
                   whileHover={{
                     scale: 1.2,
+                    color: "#d9764a",
                     transition: { duration: 0.2 }
                   }}
                 >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                    {letter}
-                  </span>
+                  {letter}
                 </motion.span>
               ))}
             </motion.div>
@@ -1029,13 +1139,13 @@ const Home = () => {
   };
 
   const TestimonialsHeading = () => {
-    const mainText = "Voices";
-    const subText = "That Inspire";
+    const mainText = "Client";
+    const subText = "Success Stories";
     const mainLetters = Array.from(mainText);
     const subLetters = Array.from(subText);
-  
+
     return (
-      <motion.div
+      <motion.div 
         className="mb-20 relative"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -1048,7 +1158,7 @@ const Home = () => {
               key={i}
               className="absolute w-2 h-2 rounded-full"
               style={{
-                background: i % 2 ? '#ff7e6720' : '#4a90e220',
+                background: i % 2 ? '#d9764a20' : '#2b5a9e20',
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
               }}
@@ -1065,23 +1175,19 @@ const Home = () => {
             />
           ))}
         </div>
-  
+
         {/* Main Text Animation */}
         <div className="flex flex-col items-center relative">
           <div className="flex justify-center gap-x-4 mb-2">
             {mainLetters.map((letter, index) => (
               <motion.span
                 key={index}
-                className="text-8xl md:text-9xl font-bold relative"
-                initial={{
-                  opacity: 0,
-                  x: index % 2 === 0 ? -50 : 50,
-                  y: index % 3 === 0 ? -50 : 50,
-                }}
+                className="text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]"
+                initial={{ opacity: 0, y: 50, rotateX: -90 }}
                 whileInView={{
                   opacity: 1,
-                  x: 0,
                   y: 0,
+                  rotateX: 0,
                 }}
                 transition={{
                   duration: 0.7,
@@ -1089,50 +1195,49 @@ const Home = () => {
                   type: "spring",
                   stiffness: 100,
                 }}
+                whileHover={{
+                  scale: 1.1,
+                  rotateY: 180,
+                  transition: { duration: 0.3 }
+                }}
               >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300">
-                  {letter}
-                </span>
+                {letter}
               </motion.span>
             ))}
           </div>
-  
+
           {/* Sub Text Animation */}
           <div className="flex justify-center gap-x-2">
             {subLetters.map((letter, index) => (
               <motion.span
                 key={index}
-                className="text-4xl md:text-6xl font-bold"
-                initial={{
-                  opacity: 0,
-                  x: index % 2 === 0 ? 50 : -50,
-                  y: index % 2 === 0 ? -50 : 50,
-                }}
+                className="text-4xl md:text-6xl font-bold text-white/80"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{
                   opacity: 1,
-                  x: 0,
                   y: 0,
                 }}
                 transition={{
                   duration: 0.5,
                   delay: mainLetters.length * 0.1 + index * 0.05,
-                  type: "spring",
-                  stiffness: 80,
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  color: "#d9764a",
+                  transition: { duration: 0.2 }
                 }}
               >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                  {letter}
-                </span>
+                {letter}
               </motion.span>
             ))}
           </div>
-  
+
           {/* Decorative Lines */}
           <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-3">
             {[...Array(3)].map((_, i) => (
               <motion.div
                 key={i}
-                className="h-1 w-16 rounded-full bg-gradient-to-r from-[#ff7e67] to-[#4a90e2]"
+                className="h-1 w-16 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 transition={{
@@ -1148,126 +1253,45 @@ const Home = () => {
       </motion.div>
     );
   };
-  
 
   const TestimonialsSection = () => {
-    const [[ direction], setPage] = useState([0, 0]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-  
-    const slideVariants = {
-      enter: (direction) => ({
-        x: direction > 0 ? 1000 : -1000,
-        opacity: 0
-      }),
-      center: {
-        zIndex: 1,
-        x: 0,
-        opacity: 1
-      },
-      exit: (direction) => ({
-        zIndex: 0,
-        x: direction < 0 ? 1000 : -1000,
-        opacity: 0
-      })
-    };
-
-    const swipeConfidenceThreshold = 10000;
-    const swipePower = (offset, velocity) => {
-      return Math.abs(offset) * velocity;
-    };
-
-    const paginate = (newDirection) => {
-      const newIndex = (currentIndex + newDirection + testimonials.length) % testimonials.length;
-      setPage([newIndex, newDirection]);
-    };
-
-    // Auto scroll effect
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) =>
-          prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-        
-        );
-      }, 3000);
-
-      return () => clearInterval(timer);
-    }, []);
-
+    // Double the testimonials array for seamless looping
+    const duplicatedTestimonials = [...testimonials, ...testimonials];
+    
     return (
       <Section>
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto ">
           <TestimonialsHeading />
-
-          <div className="relative h-[400px] overflow-hidden">
-            {/* Navigation Arrows */}
-            <motion.button
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-lg flex items-center justify-center hover:bg-white/20 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => paginate(-1)}
+          
+          <div className="relative overflow-hidden">
+            {/* Single row scrolling container */}
+            <motion.div 
+              className="flex gap-8 py-10"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
             >
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </motion.button>
-
-            <motion.button
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-lg flex items-center justify-center hover:bg-white/20 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => paginate(1)}
-            >
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </motion.button>
-
-            {/* Testimonial Cards */}
-            <AnimatePresence initial={false} custom={direction}>
+              {/* Single row - moving left */}
               <motion.div
-                key={currentIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
+                className="flex gap-8"
+                animate={{
+                  x: [0, -1920],
+                }}
                 transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
+                  duration: 25,
+                  repeat: Infinity,
+                  ease: "linear",
                 }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={1}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = swipePower(offset.x, velocity.x);
-                  if (swipe < -swipeConfidenceThreshold) {
-                    paginate(1);
-                  } else if (swipe > swipeConfidenceThreshold) {
-                    paginate(-1);
-                  }
-                }}
-                className="absolute inset-0 flex items-center justify-center"
+                style={{ willChange: 'transform' }}
               >
-                <TestimonialCard testimonial={testimonials[currentIndex]} />
+                {duplicatedTestimonials.map((testimonial, index) => (
+                  <TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
+                ))}
               </motion.div>
-            </AnimatePresence>
+            </motion.div>
 
-            {/* Dots Indicator */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-              {testimonials.map((_, index) => (
-                <motion.button
-                  key={index}
-                  className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-[#d9764a]' : 'bg-white/20'
-                    }`}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    const direction = index > currentIndex ? 1 : -1;
-                    setPage([index, direction]);
-                  }}
-                />
-              ))}
-            </div>
+            {/* Gradient overlays for smooth edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-black to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-black to-transparent z-10" />
           </div>
         </div>
       </Section>
@@ -1277,57 +1301,39 @@ const Home = () => {
   const TestimonialCard = ({ testimonial }) => (
     <motion.div
       className="relative min-w-[350px] group"
-      whileHover={{
-        scale: 1.1,
+      whileHover={{ 
+        scale: 1.05, 
         zIndex: 20,
-        transition: { duration: 0.3 },
+        transition: { duration: 0.2 } 
       }}
     >
       <motion.div
-        className="relative bg-gradient-to-br from-[#19234d] to-[#2b5a9e] backdrop-blur-md rounded-3xl p-8 h-full border border-white/10 shadow-lg shadow-[#4a90e2]/30"
+        className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl p-8 h-full border border-white/10"
         whileHover={{
           translateZ: 50,
-          rotateX: -10,
-          rotateY: 10,
+          rotateX: -5,
+          rotateY: 5,
         }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* Fancy Glowing Border */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-[#4a90e2] via-[#ff7e67] to-[#ffb74a] opacity-20 blur-xl"></div>
-  
-        {/* Animated Floating Quote Icon */}
+        {/* Quote Icon */}
         <motion.div
-          className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-[#ff7e67] to-[#4a90e2] rounded-full flex items-center justify-center shadow-lg"
-          whileHover={{ scale: 1.3, rotate: 180 }}
-          animate={{
-            y: [0, -10, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "mirror",
-          }}
+          className="absolute -top-5 -right-5 w-12 h-12 bg-gradient-to-br from-[#d9764a] to-[#2b5a9e] rounded-full flex items-center justify-center"
+          whileHover={{ scale: 1.2, rotate: 180 }}
         >
-          <svg
-            className="w-8 h-8 text-white"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
           </svg>
         </motion.div>
-  
-        {/* Testimonial Content */}
-        <p className="text-gray-300 text-lg italic leading-relaxed mb-8">
-          {testimonial.text}
-        </p>
-  
-        {/* Author Info Section */}
+
+        {/* Content */}
+        <p className="text-gray-300 mb-8">{testimonial.text}</p>
+
+        {/* Author Info */}
         <div className="flex items-center mt-auto">
-          <motion.div
-            className="relative w-14 h-14 mr-4 overflow-hidden rounded-full border-2 border-[#4a90e2] shadow-lg"
-            whileHover={{ scale: 1.2 }}
+          <motion.div 
+            className="relative w-12 h-12 mr-4 overflow-hidden rounded-full"
+            whileHover={{ scale: 1.1 }}
           >
             <img
               src={testimonial.image}
@@ -1336,32 +1342,13 @@ const Home = () => {
             />
           </motion.div>
           <div>
-            <h4 className="text-white text-xl font-bold">{testimonial.author}</h4>
-            <p className="text-gray-400 text-sm">{testimonial.position}</p>
+            <h4 className="text-white font-bold">{testimonial.author}</h4>
+            <p className="text-gray-400">{testimonial.position}</p>
           </div>
-        </div>
-  
-        {/* Glowing Accent Lines */}
-        <div className="absolute bottom-4 left-4 flex gap-2">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="h-1 w-12 bg-gradient-to-r from-[#ff7e67] to-[#4a90e2] rounded-full"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: i * 0.2,
-                type: "spring",
-                stiffness: 80,
-              }}
-            />
-          ))}
         </div>
       </motion.div>
     </motion.div>
   );
-  
 
   // Newsletter Section - Optimized animations
   const NewsletterSection = () => (
@@ -1491,102 +1478,53 @@ const Home = () => {
   };
 
   const ProcessHeading = () => {
-    const mainText = "Our";
-    const subText = "Process";
-    const mainLetters = Array.from(mainText);
-    const subLetters = Array.from(subText);
+    const text = "Our Process";
+    const letters = Array.from(text);
 
     return (
       <div className="mb-20 relative">
         {/* Background Text */}
         <motion.h2
-          className="text-[12rem] md:text-[16rem] font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          className="text-[12rem] font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{
             WebkitTextStroke: "1px rgba(217,118,74,0.1)",
             color: "transparent",
+          }}
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.1, 0.2, 0.1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
           }}
         >
           Process
         </motion.h2>
 
-        {/* Main Title Container - Side by side "Our Process" */}
-        <div className="flex justify-center items-center gap-x-6">
-          {/* "Our" Text */}
-          <motion.div className="flex gap-x-2">
-            {mainLetters.map((letter, index) => (
-              <motion.span
-                key={index}
-                className="text-7xl md:text-8xl font-bold relative"
-                initial={{ opacity: 0, y: 100, rotateX: 90 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  rotateX: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-                whileHover={{
-                  scale: 1.2,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300">
-                  {letter}
-                </span>
-              </motion.span>
-            ))}
-          </motion.div>
-
-          {/* "Process" Text */}
-          <motion.div className="flex gap-x-2">
-            {subLetters.map((letter, index) => (
-              <motion.span
-                key={index}
-                className="text-7xl md:text-8xl font-bold relative inline-block"
-                initial={{ scale: 0, rotateX: 90 }}
-                whileInView={{
-                  scale: 1,
-                  rotateX: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1 + 0.3,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-                whileHover={{
-                  scale: 1.2,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                  {letter}
-                </span>
-              </motion.span>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Decorative Lines */}
-        <div className="absolute top-28 left-0 bottom-0 right-0 flex justify-center gap-4">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
+        <div className="flex justify-center gap-2">
+          {letters.map((letter, i) => (
+            <motion.span
               key={i}
-              className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
-              animate={{
-                scaleX: [1, 1.5, 1],
-                opacity: [0.5, 1, 0.5],
-              }}
+              className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]"
+              initial={{ y: 200 }}
+              whileInView={{ y: 0 }}
+              viewport={{ amount: 0.3 }}
               transition={{
-                duration: 2,
-                delay: i * 0.2,
-                repeat: Infinity,
+                duration: 0.5,
+                delay: i * 0.1,
+                type: "spring",
+                stiffness: 100
               }}
-            />
+              whileHover={{
+                scale: 1.2,
+                rotate: 360,
+                transition: { duration: 0.3 }
+              }}
+            >
+              {letter}
+            </motion.span>
           ))}
         </div>
       </div>
@@ -1594,136 +1532,62 @@ const Home = () => {
   };
 
   const ServicesHeading = () => {
-    const mainText = "Our";
-    const subText = "Services";
-    const mainLetters = Array.from(mainText);
-    const subLetters = Array.from(subText);
-
-    // Use react-intersection-observer instead
-    const { ref, inView } = useInViewObserver({
-      threshold: 0.5,
-      triggerOnce: false
-    });
-
-    // Add controls for animations
-    const controls = useAnimation();
-
-    // Trigger animation when component comes into view
+    const [text, setText] = useState("");
+    const fullText = "Our Services";
+    
     useEffect(() => {
-      if (inView) {
-        controls.start("visible");
-      } else {
-        controls.start("hidden");
-      }
-    }, [controls, inView]);
+      let currentIndex = 0;
+      const interval = setInterval(() => {
+        if (currentIndex <= fullText.length) {
+          setText(fullText.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 150);
+
+      return () => clearInterval(interval);
+    }, []);
 
     return (
-      <div ref={ref} className="mb-20 relative overflow-hidden h-[300px]">
-        {/* Background Text */}
+      <div className="mb-20 relative overflow-hidden">
         <motion.h2
-          className="text-[12rem] md:text-[16rem] font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-          style={{
-            WebkitTextStroke: "1px rgba(217,118,74,0.1)",
-            color: "transparent",
-          }}
+          className="text-6xl font-bold text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
         >
-          Services
+          <span className="inline-block">
+            {text}
+            <motion.span
+              className="inline-block w-[3px] h-12 bg-[#d9764a] ml-1"
+              animate={{
+                opacity: [1, 0, 1],
+              }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+              }}
+            />
+          </span>
         </motion.h2>
-
-        {/* Main Content */}
-        <div className="relative z-10 flex justify-center items-center h-full">
-          <div className="flex items-center gap-x-6">
-            {/* "Our" Text sliding from left */}
-            <motion.div 
-              className="flex gap-x-2"
-              variants={{
-                hidden: { x: "-100vw", opacity: 0 },
-                visible: { 
-                  x: 0, 
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    duration: 1.5,
-                    bounce: 0.3
-                  }
-                }
-              }}
-              initial="hidden"
-              animate={controls}
-            >
-              {mainLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="text-7xl md:text-8xl font-bold relative"
-                  whileHover={{
-                    scale: 1.2,
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300">
-                    {letter}
-                  </span>
-                </motion.span>
-              ))}
-            </motion.div>
-
-            {/* "Services" Text sliding from right */}
-            <motion.div 
-              className="flex gap-x-2"
-              variants={{
-                hidden: { x: "100vw", opacity: 0 },
-                visible: { 
-                  x: 0, 
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    duration: 1.5,
-                    bounce: 0.3
-                  }
-                }
-              }}
-              initial="hidden"
-              animate={controls}
-            >
-              {subLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="text-7xl md:text-8xl font-bold relative inline-block"
-                  whileHover={{
-                    scale: 1.2,
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                    {letter}
-                  </span>
-                </motion.span>
-              ))}
-            </motion.div>
-          </div>
+        
+        {/* Sliding decorative text */}
+        <div className="absolute -top-2 left-0 w-full overflow-hidden opacity-10">
+          <motion.div
+            className="whitespace-nowrap text-8xl font-bold"
+            animate={{
+              x: [0, -1000],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            SERVICES SERVICES SERVICES SERVICES
+          </motion.div>
         </div>
-
-        {/* Optional: Impact Effect when words collide */}
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full"
-          variants={{
-            hidden: { scale: 0, opacity: 0 },
-            visible: {
-              scale: [0, 2, 0],
-              opacity: [0, 0.2, 0],
-              transition: {
-                duration: 0.5,
-                delay: 0.75,
-                ease: "easeOut"
-              }
-            }
-          }}
-          initial="hidden"
-          animate={controls}
-          style={{
-            background: "radial-gradient(circle, rgba(217,118,74,0.3) 0%, transparent 70%)"
-          }}
-        />
       </div>
     );
   };
@@ -1752,7 +1616,7 @@ const Home = () => {
         {/* Enhanced Background Elements */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
           {/* Floating Geometric Shapes */}
-          {[...Array(8)].map((_, i) => ( // Reduced from 15 to 8
+          {[...Array(8)].map((_, i) => ( // Reduced from 15 to 8 shapes
             <motion.div
               key={i}
               className="absolute"
@@ -2267,7 +2131,7 @@ const Home = () => {
             {/* Portfolio Section */}
             <Section>
               <div className="max-w-7xl mx-auto px-4">
-                <FeaturedProjectsSection />
+              <FeaturedProjectsSection />
 
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-4 auto-rows-[180px] gap-4"
@@ -2365,7 +2229,7 @@ const Home = () => {
 
 export default Home;
 
-<style>{`
+<style jsx global>{`
   .optimize-animation {
     transform: translateZ(0);
     backface-visibility: hidden;
