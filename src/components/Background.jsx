@@ -7,7 +7,7 @@ const BackgroundWrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to right, #19234d, #2b5a9e);
+  background: linear-gradient(to right, #4158D0, #C850C0);
   z-index: -1;
 `;
 

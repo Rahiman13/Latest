@@ -47,7 +47,6 @@ const Home = () => {
       title: "App Development",
       description: "Native and cross-platform mobile applications for iOS and Android."
     },
-    
     {
       icon: "🎯",
       title: "Digital Marketing",
@@ -294,7 +293,7 @@ const Home = () => {
             }}
             animate={{
               y: [-bubble.moveRange, bubble.moveRange],
-              x: [-bubble.moveRange / 2, bubble.moveRange / 2],
+              x: [-bubble.moveRange/2, bubble.moveRange/2],
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.6, 0.3],
               rotate: [0, 180, 360],
@@ -411,7 +410,7 @@ const Home = () => {
             ease: "linear"
           }}
         />
-
+        
         {/* Diamond */}
         <motion.div
           className="absolute w-64 h-64"
@@ -469,200 +468,81 @@ const Home = () => {
   };
 
   const ServicesSection = () => {
-    const mainText = "Our";
-    const subText = "Services";
-    const mainLetters = Array.from(mainText);
-    const subLetters = Array.from(subText);
-
     return (
       <section className="relative py-32 overflow-hidden">
+        {/* Animated Background Lines */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-px w-full"
+              style={{
+                background: `linear-gradient(90deg, transparent, rgba(217,118,74,${0.1 - (i * 0.005)}), transparent)`,
+                top: `${(100 / 20) * i}%`,
+              }}
+              animate={{
+                x: [-1000, 1000],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 3 + i,
+                repeat: Infinity,
+                delay: i * 0.2,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Services Content */}
         <div className="max-w-7xl mx-auto px-4 relative">
-          <motion.div
-            className="perspective-1000 mb-20 relative"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          <motion.h2
+            className="text-8xl md:text-9xl font-bold text-center mb-20"
+            style={{
+              WebkitTextStroke: "1px rgba(255,255,255,0.1)",
+              color: "transparent"
+            }}
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            {/* Background Text */}
-            <motion.h2
-              className="text-[12rem] md:text-[16rem] font-bold text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              style={{
-                WebkitTextStroke: "1px rgba(217,118,74,0.1)",
-                color: "transparent",
-              }}
-            >
-              Services
-            </motion.h2>
+            Our Services
+          </motion.h2>
 
-            {/* Animated Letters Container */}
-            <motion.h2
-              className="text-8xl md:text-9xl font-bold text-center relative flex justify-center gap-x-3 flex-wrap"
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              {mainLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className={`inline-block ${letter === " " ? "w-8" : ""
-                    } bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]`}
-                  initial={{ opacity: 0, y: 100, rotateX: 90 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    rotateX: 0,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.1,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{
-                    scale: 1.2,
-                    textShadow: "0 0 20px rgba(217,118,74,0.5)",
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-              <motion.span
-                className="inline-block w-8"
-                initial={{ opacity: 0, y: 100, rotateX: 90 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  rotateX: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: mainLetters.length * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-              >
-                &nbsp;
-              </motion.span>
-              {subLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className={`inline-block ${letter === " " ? "w-8" : ""
-                    } bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]`}
-                  initial={{ opacity: 0, y: 100, rotateX: 90 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    rotateX: 0,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: (mainLetters.length + 1) * 0.1 + index * 0.1,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{
-                    scale: 1.2,
-                    textShadow: "0 0 20px rgba(217,118,74,0.5)",
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </motion.h2>
-
-            {/* Decorative Lines */}
-            <div className="absolute top-36 left-0 bottom-0 right-0 flex justify-center gap-4">
-              {[...Array(3)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
-                  animate={{
-                    scaleX: [1, 1.5, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 2,
-                    delay: i * 0.2,
-                    repeat: Infinity,
-                  }}
-                />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          {/* Services Grid with 3D Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {services.map((service, index) => (
               <motion.div
                 key={index}
-                className="group perspective-1000"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="group perspective"
+                initial={{ opacity: 0, rotateX: -30 }}
+                whileInView={{ opacity: 1, rotateX: 0 }}
+                whileHover={{ scale: 1.05 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
               >
                 <motion.div
-                  className="relative bg-gradient-to-br from-white/5 to-white/10 rounded-3xl p-8 transform-gpu transition-all duration-500"
-                  whileHover={{
-                    rotateY: 15,
-                    rotateX: -5,
-                    translateZ: "50px",
-                  }}
+                  className="relative bg-gradient-to-br from-white/5 to-white/10 rounded-2xl p-8 transform-gpu transition-all duration-500 group-hover:rotate-y-12"
                   style={{ transformStyle: "preserve-3d" }}
                 >
-                  {/* Updated Service Card Icon */}
-                  <motion.div
-                    className="absolute -top-10 left-10 w-20 h-20 flex items-center justify-center transform-gpu"
-                    style={{ transformStyle: "preserve-3d" }}
-                  >
-                    {/* Rotating Background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#d9764a]/20 to-[#2b5a9e]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Service Content */}
+                  <div className="relative z-10">
                     <motion.div
-                      className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#d9764a] to-[#2b5a9e]"
-                      animate={{
-                        rotate: [0, 360],
-                      }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                    />
-
-                    {/* Static Icon */}
-                    <div className="relative z-10 text-4xl text-white">
+                      className="text-7xl mb-6"
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                    >
                       {service.icon}
-                    </div>
-                  </motion.div>
-
-                  {/* Content */}
-                  <div className="relative z-10 pl-16 pt-8">
-                    <h3 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+                    </motion.div>
+                    <h3 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed">{service.description}</p>
-
-                    {/* Interactive Features List */}
-                    <motion.ul className="mt-6 space-y-3">
-                      {service.features?.map((feature, i) => (
-                        <motion.li
-                          key={i}
-                          className="flex items-center space-x-3 text-sm text-gray-300"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                        >
-                          <motion.span
-                            className="w-2 h-2 bg-[#d9764a] rounded-full"
-                            whileHover={{ scale: 1.5 }}
-                          />
-                          <span>{feature}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
+                    <p className="text-gray-400">{service.description}</p>
                   </div>
 
-                  {/* Decorative Elements */}
-                  <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-[#d9764a]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-                  <div className="absolute -left-4 -top-4 w-32 h-32 bg-[#2b5a9e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                  {/* Floating Elements */}
+                  <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-[#d9764a]/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500" />
                 </motion.div>
               </motion.div>
             ))}
@@ -678,7 +558,7 @@ const Home = () => {
         {/* Background Elements */}
         <div className="absolute inset-0">
           {/* <div className="absolute inset-0 bg-gradient-to-br from-[#19234d]/90 via-[#2b5a9e]/60 to-[#19234d]/90" /> */}
-
+          
           {/* Animated particles */}
           {/* {[...Array(20)].map((_, i) => (
             <motion.div
@@ -730,7 +610,7 @@ const Home = () => {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div
+            <motion.div 
               className="flex gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -793,7 +673,7 @@ const Home = () => {
                   alt="Innovation"
                   className="w-full h-full object-cover rounded-[100px] opacity-90"
                 />
-
+                
                 {/* Inner Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#d9764a]/20 to-transparent rounded-[100px] blur-xl" />
               </motion.div>
@@ -865,550 +745,6 @@ const Home = () => {
     );
   };
 
-  // Enhanced Scroll-Triggered Animations
-  const scrollVariants = {
-    hidden: { opacity: 0, y: 100 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] // Custom bezier curve for smooth animation
-      }
-    }
-  };
-
-  // Floating Animation Effect
-  const floatingAnimation = {
-    animate: {
-      y: [-20, 20],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  // Gradient Movement Animation
-  const gradientAnimation = {
-    animate: {
-      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-      transition: {
-        duration: 15,
-        repeat: Infinity,
-        ease: "linear"
-      }
-    }
-  };
-
-  // Enhanced Section Component
-  const Section = ({ children, className }) => (
-    <motion.section
-      className={`relative py-32 overflow-hidden ${className}`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={{
-        hidden: { opacity: 0 },
-        visible: {
-          opacity: 1,
-          transition: {
-            duration: 0.6,
-            staggerChildren: 0.2
-          }
-        }
-      }}
-    >
-      {children}
-    </motion.section>
-  );
-
-  // Animated Background Component
-  const AnimatedBackground = () => (
-    <div className="absolute inset-0 -z-10">
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-[500px] h-[500px] rounded-full"
-          style={{
-            background: `radial-gradient(circle, ${i % 2 ? '#d9764a10' : '#2b5a9e10'} 0%, transparent 70%)`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 30, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 10 + Math.random() * 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-
-  const FeaturedProjectsSection = () => {
-    const mainText = "Featured";
-    const subText = "Projects";
-    const mainLetters = Array.from(mainText);
-    const subLetters = Array.from(subText);
-
-    return (
-      <section className="relative  overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 relative">
-          <motion.div
-            className="perspective-1000 mb-20 relative"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            {/* Floating Background Elements */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(20)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-4 h-4 rounded-full"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    background: `radial-gradient(circle at center, ${
-                      i % 2 ? '#d9764a20' : '#2b5a9e20'
-                    }, transparent)`,
-                  }}
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                    y: [-20, 20, -20],
-                  }}
-                  transition={{
-                    duration: 3 + Math.random() * 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Main Title - "Featured" */}
-            <motion.div className="flex justify-center gap-x-4 mb-4">
-              {mainLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="text-8xl md:text-9xl font-bold relative"
-                  initial={{ opacity: 0, y: 100, rotateZ: -45 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    rotateZ: 0,
-                  }}
-                  transition={{
-                    duration: 0.7,
-                    delay: index * 0.1,
-                    type: "spring",
-                    bounce: 0.5,
-                  }}
-                >
-                  <span className="relative inline-block">
-                    {/* Letter with gradient */}
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]">
-                      {letter}
-                    </span>
-                    
-                    {/* Glowing effect */}
-                    <motion.span
-                      className="absolute inset-0 bg-clip-text text-transparent bg-white blur-sm"
-                      animate={{
-                        opacity: [0, 0.5, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        delay: index * 0.2,
-                        repeat: Infinity,
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  </span>
-                </motion.span>
-              ))}
-            </motion.div>
-
-            {/* Sub Title - "Projects" */}
-            <motion.div 
-              className="flex justify-center gap-x-2"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              {subLetters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="text-6xl md:text-7xl font-bold relative inline-block"
-                  initial={{ scale: 0, rotateX: 90 }}
-                  whileInView={{
-                    scale: 1,
-                    rotateX: 0,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.1 + 0.7,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{
-                    scale: 1.2,
-                    color: "#d9764a",
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </motion.div>
-
-            {/* Decorative Line */}
-            <motion.div
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-[#d9764a] to-transparent"
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.8 }}
-            />
-          </motion.div>
-
-          {/* Projects Grid Container */}
-          {/* Your existing projects grid code here */}
-        </div>
-      </section>
-    );
-  };
-
-  const TestimonialsHeading = () => {
-    const mainText = "Client";
-    const subText = "Success Stories";
-    const mainLetters = Array.from(mainText);
-    const subLetters = Array.from(subText);
-
-    return (
-      <motion.div 
-        className="mb-20 relative"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        {/* Floating Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                background: i % 2 ? '#d9764a20' : '#2b5a9e20',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                scale: [1, 1.5, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                delay: i * 0.1,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Main Text Animation */}
-        <div className="flex flex-col items-center relative">
-          <div className="flex justify-center gap-x-4 mb-2">
-            {mainLetters.map((letter, index) => (
-              <motion.span
-                key={index}
-                className="text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d9764a] to-[#2b5a9e]"
-                initial={{ opacity: 0, y: 50, rotateX: -90 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  rotateX: 0,
-                }}
-                transition={{
-                  duration: 0.7,
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  rotateY: 180,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Sub Text Animation */}
-          <div className="flex justify-center gap-x-2">
-            {subLetters.map((letter, index) => (
-              <motion.span
-                key={index}
-                className="text-4xl md:text-6xl font-bold text-white/80"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: mainLetters.length * 0.1 + index * 0.05,
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  color: "#d9764a",
-                  transition: { duration: 0.2 }
-                }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Decorative Lines */}
-          <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-3">
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="h-1 w-16 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: i * 0.2,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
-  const TestimonialsSection = () => {
-    // Double the testimonials array for seamless looping
-    const duplicatedTestimonials = [...testimonials, ...testimonials];
-    
-    return (
-      <Section>
-        <div className="max-w-7xl mx-auto ">
-          <TestimonialsHeading />
-          
-          <div className="relative overflow-hidden">
-            {/* Single row scrolling container */}
-            <motion.div 
-              className="flex gap-8 py-10"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-            >
-              {/* Single row - moving left */}
-              <motion.div
-                className="flex gap-8"
-                animate={{
-                  x: [0, -1920],
-                }}
-                transition={{
-                  duration: 25,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                style={{ willChange: 'transform' }}
-              >
-                {duplicatedTestimonials.map((testimonial, index) => (
-                  <TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Gradient overlays for smooth edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-black to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-black to-transparent z-10" />
-          </div>
-        </div>
-      </Section>
-    );
-  };
-
-  const TestimonialCard = ({ testimonial }) => (
-    <motion.div
-      className="relative min-w-[350px] group"
-      whileHover={{ 
-        scale: 1.05, 
-        zIndex: 20,
-        transition: { duration: 0.2 } 
-      }}
-    >
-      <motion.div
-        className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl p-8 h-full border border-white/10"
-        whileHover={{
-          translateZ: 50,
-          rotateX: -5,
-          rotateY: 5,
-        }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {/* Quote Icon */}
-        <motion.div
-          className="absolute -top-5 -right-5 w-12 h-12 bg-gradient-to-br from-[#d9764a] to-[#2b5a9e] rounded-full flex items-center justify-center"
-          whileHover={{ scale: 1.2, rotate: 180 }}
-        >
-          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-          </svg>
-        </motion.div>
-
-        {/* Content */}
-        <p className="text-gray-300 mb-8">{testimonial.text}</p>
-
-        {/* Author Info */}
-        <div className="flex items-center mt-auto">
-          <motion.div 
-            className="relative w-12 h-12 mr-4 overflow-hidden rounded-full"
-            whileHover={{ scale: 1.1 }}
-          >
-            <img
-              src={testimonial.image}
-              alt={testimonial.author}
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
-          <div>
-            <h4 className="text-white font-bold">{testimonial.author}</h4>
-            <p className="text-gray-400">{testimonial.position}</p>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-
-  // Newsletter Section - Optimized animations
-  const NewsletterSection = () => (
-    <Section>
-      {/* Background gradient overlay - Simplified */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/50 to-[#2b5a9e]/50 backdrop-blur-sm" />
-
-      {/* Animated circles - Optimized */}
-      <div className="absolute inset-0">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full mix-blend-overlay"
-            style={{
-              width: `${200 + i * 80}px`,
-              height: `${200 + i * 80}px`,
-              border: '1px solid rgba(255,255,255,0.1)',
-              left: `${20 + i * 10}%`,
-              top: `${20 + i * 5}%`,
-              willChange: 'transform'
-            }}
-            animate={{
-              rotate: 360,
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 15 + i * 5,
-              repeat: Infinity,
-              ease: "linear",
-              repeatType: "loop"
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Content container */}
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left column - Text content */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ amount: 0.5 }}
-            transition={{ duration: 0.4 }}
-            className="text-center lg:text-left"
-          >
-            <motion.h2
-              className="text-5xl md:text-6xl font-bold mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-                Stay Ahead of
-              </span>
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                the Future
-              </span>
-            </motion.h2>
-
-            <motion.p
-              className="text-xl text-gray-300 mb-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ amount: 0.5 }}
-              transition={{ duration: 0.3 }}
-            >
-              Join our newsletter and get exclusive insights, industry updates,
-              and special offers delivered straight to your inbox.
-            </motion.p>
-
-            {/* Stats with optimized animations */}
-            <motion.div
-              className="grid grid-cols-2 gap-6 mt-12"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ amount: 0.5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="text-center lg:text-left">
-                <div className="text-3xl font-bold text-white mb-2">5000+</div>
-                <div className="text-gray-400">Subscribers</div>
-              </div>
-              <div className="text-center lg:text-left">
-                <div className="text-3xl font-bold text-white mb-2">Weekly</div>
-                <div className="text-gray-400">Updates</div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right column - Newsletter form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ amount: 0.5 }}
-            transition={{ duration: 0.4 }}
-            className="relative"
-          >
-            {/* Simplified decorative elements */}
-            <div className="absolute -top-12 -right-12 w-20 h-20 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full blur-xl opacity-20" />
-            <div className="absolute -bottom-12 -left-12 w-24 h-24 bg-gradient-to-r from-[#19234d] to-[#2b5a9e] rounded-full blur-xl opacity-20" />
-
-            {/* Newsletter component */}
-            <NewsletterForm />
-          </motion.div>
-        </div>
-      </div>
-    </Section>
-  );
-
   return (
     <>
       <AnimatePresence>
@@ -1428,124 +764,13 @@ const Home = () => {
         {/* Floating Bubbles Container - spans entire page */}
         <BubblesBackground />
 
-        {/* Enhanced Background Elements */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          {/* Floating Geometric Shapes */}
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              style={{
-                width: `${20 + Math.random() * 30}px`,
-                height: `${20 + Math.random() * 30}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                background: i % 2 === 0
-                  ? 'linear-gradient(45deg, #d9764a20, #2b5a9e20)'
-                  : 'linear-gradient(45deg, #2b5a9e20, #d9764a20)',
-                borderRadius: i % 3 === 0 ? '50%' : i % 3 === 1 ? '30%' : '0%',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-              animate={{
-                y: [0, -50, 0],
-                rotate: [0, 180, 360],
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 10 + Math.random() * 10,
-                repeat: Infinity,
-                ease: "linear",
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-
-          {/* Animated Grid Lines */}
-          <div className="absolute inset-0" style={{ opacity: 0.1 }}>
-            {[...Array(20)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute h-[1px] w-full"
-                style={{
-                  top: `${(100 / 20) * i}%`,
-                  background: 'linear-gradient(90deg, transparent, rgba(217, 118, 74, 0.3), transparent)',
-                }}
-                animate={{
-                  scaleX: [1, 1.5, 1],
-                  opacity: [0.2, 0.5, 0.2],
-                }}
-                transition={{
-                  duration: 3 + i * 0.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
+        {/* Gradient Mesh Background */}
+        {/* <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-orange-500/20 animate-gradient" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-transparent to-pink-500/20 animate-gradient" />
           </div>
-
-          {/* Glowing Orbs */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={`orb-${i}`}
-              className="absolute rounded-full blur-2xl"
-              style={{
-                width: `${100 + i * 50}px`,
-                height: `${100 + i * 50}px`,
-                background: i % 2 === 0
-                  ? 'radial-gradient(circle, #d9764a15, transparent 70%)'
-                  : 'radial-gradient(circle, #2b5a9e15, transparent 70%)',
-              }}
-              animate={{
-                x: [0, 50, 0],
-                y: [0, 30, 0],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 15 + i * 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-
-          {/* Animated Mesh Pattern */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.15]">
-            <pattern
-              id="mesh-pattern"
-              x="0"
-              y="0"
-              width="40"
-              height="40"
-              patternUnits="userSpaceOnUse"
-            >
-              <motion.path
-                d="M 20 0 L 40 20 L 20 40 L 0 20 Z"
-                fill="none"
-                stroke="url(#mesh-gradient)"
-                strokeWidth="0.5"
-                animate={{
-                  strokeDasharray: ["0,100", "100,0"],
-                  strokeDashoffset: [0, -100],
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              />
-            </pattern>
-            <defs>
-              <linearGradient id="mesh-gradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#d9764a10" />
-                <stop offset="50%" stopColor="#2b5a9e10" />
-                <stop offset="100%" stopColor="#d9764a10" />
-              </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#mesh-pattern)" />
-          </svg>
-        </div>
+        </div> */}
 
         {/* Hero Section - adjusted timing */}
         <HeroSection />
@@ -1696,7 +921,7 @@ const Home = () => {
           {/* Update each section with parallax and 3D effects */}
           <motion.div style={{ y: parallax3 }}>
             {/* Stats Section */}
-            <Section>
+            <section className="py-20 relative z-10">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {stats.map((stat, index) => (
@@ -1727,12 +952,59 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-            </Section>
+            </section>
 
+            {/* Features Section */}
+            <section className="relative py-20 overflow-hidden">
+              {/* Background Elements */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#19234d] to-[#2b5a9e]/20" />
+              <motion.div
+                className="absolute -right-40 -top-40 w-96 h-96 bg-[#d9764a]/10 rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
 
+              <div className="max-w-7xl mx-auto px-4 relative z-10">
+                <motion.h2
+                  className="text-6xl md:text-7xl font-bold text-center mb-16"
+                  variants={fadeInUp}
+                >
+                  <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-[#d9764a]">
+                    Why Choose Us
+                  </span>
+                </motion.h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {features.map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      className="relative group"
+                      variants={fadeInUp}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b5a9e]/20 to-[#d9764a]/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300" />
+                      <div className="glass-card relative p-8 rounded-2xl overflow-hidden">
+                        <div className="text-5xl mb-4">{feature.icon}</div>
+                        <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
+                        <p className="text-gray-300">{feature.description}</p>
+                        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-[#d9764a]/10 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
             {/* About Section with Image */}
-            <Section>
+            <section className="py-20 relative z-10">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <motion.div
@@ -1774,161 +1046,224 @@ const Home = () => {
                   </motion.div>
                 </div>
               </div>
-            </Section>
+            </section>
 
-
-            {/* Features Section */}
-            <Section>
-              {/* 3D Background Elements */}
+            {/* Process Section with Images */}
+            <section className="relative py-20">
               <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#19234d] via-[#2b5a9e]/20 to-[#19234d]" />
-                <motion.div
-                  className="absolute w-full h-full"
-                  style={{
-                    background: 'radial-gradient(circle at 50% 50%, rgba(217,118,74,0.15), transparent 70%)',
-                  }}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-              </div>
-
-              <div className="max-w-7xl mx-auto px-4 relative z-10">
-                {/* Feature Cards */}
-                <div className="grid md:grid-cols-3 gap-8">
-                  {features.map((feature, index) => (
+                <div className="absolute inset-0 bg-[#19234d]/90" />
+                <div className="absolute inset-0">
+                  {[...Array(20)].map((_, i) => (
                     <motion.div
-                      key={index}
-                      className="relative group perspective-2000"
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      whileHover={{ rotateY: 10, rotateX: -5 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        delay: index * 0.1
+                      key={i}
+                      className="absolute h-1 w-1 bg-white/30 rounded-full"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
                       }}
-                    >
-                      {/* Card Background */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#d9764a]/10 to-[#2b5a9e]/10 rounded-2xl transform -skew-x-12 group-hover:skew-x-0 transition-transform duration-300" />
-
-                      {/* Card Content */}
-                      <div className="glass-card relative p-8 rounded-2xl backdrop-blur-lg border border-white/10">
-                        <motion.div
-                          className="text-5xl mb-6"
-                          whileHover={{ scale: 1.2, rotateY: 180 }}
-                          transition={{ type: "spring", stiffness: 200 }}
-                        >
-                          {feature.icon}
-                        </motion.div>
-                        <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                        <p className="text-gray-300">{feature.description}</p>
-
-                        {/* Hover Effect */}
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-[#d9764a]/5 to-[#2b5a9e]/5 rounded-2xl"
-                          initial={{ opacity: 0 }}
-                          whileHover={{ opacity: 1 }}
-                          transition={{ duration: 0.3 }}
-                        />
-                      </div>
-                    </motion.div>
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [0.3, 0.8, 0.3],
+                      }}
+                      transition={{
+                        duration: 2 + Math.random() * 2,
+                        repeat: Infinity,
+                        delay: Math.random() * 2,
+                      }}
+                    />
                   ))}
                 </div>
               </div>
-            </Section>
 
-            {/* Process Section with Images */}
-            <Section>
-              {/* 3D Connection Lines */}
-              <div className="absolute inset-0 flex items-center">
-                <svg className="w-full h-1" viewBox="0 0 1000 1">
-                  <motion.path
-                    d="M0,0.5 C250,0.5 750,0.5 1000,0.5"
-                    stroke="url(#processGradient)"
-                    strokeWidth="2"
-                    fill="none"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 1.5 }}
-                  />
-                  <defs>
-                    <linearGradient id="processGradient">
-                      <stop offset="0%" stopColor="#d9764a" stopOpacity="0.3" />
-                      <stop offset="50%" stopColor="#2b5a9e" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#d9764a" stopOpacity="0.3" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+              <div className="max-w-7xl mx-auto px-4 relative">
+                <motion.h2
+                  className="text-6xl md:text-7xl font-bold text-center mb-20"
+                  variants={fadeInUp}
+                >
+                  <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-[#d9764a]">
+                    Our Process
+                  </span>
+                </motion.h2>
 
-              <div className="max-w-7xl mx-auto px-4 relative z-10">
-                <div className="grid md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                   {processSteps.map((step, index) => (
                     <motion.div
                       key={index}
-                      className="relative perspective-1000"
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      whileHover={{ rotateY: 15, rotateX: -5 }}
-                      transition={{ delay: index * 0.2 }}
+                      className="relative group"
+                      variants={fadeInUp}
+                      whileHover={{ y: -10 }}
                     >
-                      <div className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden transform preserve-3d">
-                        <motion.div
-                          className="relative h-48"
-                          whileHover={{ scale: 1.05 }}
-                        >
-                          <img
-                            src={step.image}
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b5a9e]/20 to-[#d9764a]/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300" />
+                      <div className="glass-card relative p-6 rounded-2xl overflow-hidden">
+                        <div className="relative h-48 mb-6 overflow-hidden rounded-xl">
+                          <img 
+                            src={step.image} 
                             alt={step.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
-
-                          {/* 3D Floating Icon */}
-                          <motion.div
-                            className="absolute top-4 left-4 bg-white/10 backdrop-blur-lg rounded-full w-12 h-12 flex items-center justify-center text-2xl"
-                            animate={{
-                              y: [0, -10, 0],
-                              rotateY: [0, 360],
-                            }}
-                            transition={{
-                              duration: 3,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            {step.icon}
-                          </motion.div>
-                        </motion.div>
-
-                        <div className="p-6">
-                          <h3 className="text-2xl font-bold text-white mb-3">{step.title}</h3>
-                          <p className="text-gray-300">{step.description}</p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#19234d] to-transparent" />
+                          <div className="absolute bottom-4 right-4 text-4xl">{step.icon}</div>
                         </div>
+                        <h3 className="text-2xl font-bold mb-2 text-white">{step.title}</h3>
+                        <p className="text-gray-300">{step.description}</p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
               </div>
-            </Section>
+            </section>
 
+            {/* Testimonials Section */}
+            <section className="py-20 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4">
+                <motion.h2
+                  className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ amount: 0.5 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  Client Success Stories
+                </motion.h2>
 
+                <div className="grid lg:grid-cols-3 gap-8">
+                  {testimonials.map((testimonial, index) => (
+                    <motion.div
+                      key={index} 
+                      className="relative group h-full"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ amount: 0.5 }}
+                      transition={{ delay: index * 0.2 }}
+                    >
+                      {/* Card container with hover effects */}
+                      <motion.div
+                        className="h-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl p-8 relative overflow-hidden"
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                      >
+                        {/* Animated gradient border */}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-[#d9764a]/0 via-[#d9764a]/30 to-[#d9764a]/0"
+                          animate={{
+                            x: ['-100%', '100%'],
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        />
 
-            {/* Services Section */}
-            <ServicesSection />
+                        {/* Glowing orb */}
+                        <motion.div
+                          className="absolute -top-10 -right-10 w-32 h-32 bg-[#d9764a]/20 rounded-full blur-3xl"
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.3, 0.6, 0.3],
+                          }}
+                          transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
 
+                        {/* Quote icon with animation */}
+                        <motion.div
+                          className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-[#d9764a] to-[#de7527] rounded-full flex items-center justify-center"
+                          whileHover={{ scale: 1.2, rotate: 180 }}
+                          transition={{ type: "spring", stiffness: 200 }}
+                        >
+                          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                          </svg>
+                        </motion.div>
+
+                        {/* Rating stars with staggered animation */}
+                        <div className="flex mb-6">
+                          {[...Array(5)].map((_, i) => (
+                            <motion.svg
+                              key={i}
+                              className="w-5 h-5 text-yellow-500 mr-1"
+                              initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                              transition={{
+                                delay: 0.1 * i,
+                                type: "spring",
+                                stiffness: 200
+                              }}
+                              whileHover={{ scale: 1.2, rotate: 180 }}
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292z" />
+                            </motion.svg>
+                          ))}
+                        </div>
+
+                        {/* Testimonial content */}
+                        <motion.p
+                          className="text-gray-300 mb-8 relative z-10 min-h-[100px]"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          {testimonial.text}
+                        </motion.p>
+
+                        {/* Author info with hover effects */}
+                        <div className="flex items-center mt-auto">
+                          <motion.div
+                            className="relative w-12 h-12 mr-4"
+                            whileHover={{ scale: 1.1 }}
+                          >
+                            <img
+                              src={testimonial.image}
+                              alt={testimonial.author}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                            <motion.div
+                              className="absolute inset-0 rounded-full border-2 border-[#d9764a]"
+                              initial={{ opacity: 0, scale: 1.2 }}
+                              whileHover={{ opacity: 1, scale: 1 }}
+                              transition={{ type: "spring", stiffness: 200 }}
+                            />
+                          </motion.div>
+                          <div>
+                            <motion.h4
+                              className="text-white font-bold"
+                              whileHover={{ x: 5 }}
+                            >
+                              {testimonial.author}
+                            </motion.h4>
+                            <motion.p
+                              className="text-gray-400"
+                              whileHover={{ x: 5 }}
+                            >
+                              {testimonial.position}
+                            </motion.p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
             {/* Portfolio Section */}
-            <Section>
+            <section className="py-20 relative">
               <div className="max-w-7xl mx-auto px-4">
-              <FeaturedProjectsSection />
+                <motion.h2
+                  className="text-5xl md:text-6xl font-bold text-center text-white mb-16"
+                  variants={fadeInRight}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ amount: 0.5 }}
+                >
+                  Featured Projects
+                </motion.h2>
 
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-4 auto-rows-[180px] gap-4"
@@ -2010,13 +1345,132 @@ const Home = () => {
                   ))}
                 </motion.div>
               </div>
-            </Section>
+            </section>
 
-            {/* Testimonials Section */}
-            <TestimonialsSection />
+            {/* Services Section */}
+            <ServicesSection />
 
             {/* Newsletter Section - Optimized animations */}
-            <NewsletterSection />
+            <motion.section
+              className="relative py-32 px-4 md:px-6 overflow-hidden"
+              initial={{ opacity: 0 }}
+              whileInView={{
+                opacity: 1,
+                transition: {
+                  duration: 0.4,
+                  ease: "easeOut"
+                }
+              }}
+              viewport={{
+                amount: 0.3,
+                margin: "-50px"
+              }}
+            >
+              {/* Background gradient overlay - Simplified */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/50 to-[#2b5a9e]/50 backdrop-blur-sm" />
+
+              {/* Animated circles - Optimized */}
+              <div className="absolute inset-0">
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute rounded-full mix-blend-overlay"
+                    style={{
+                      width: `${200 + i * 80}px`,
+                      height: `${200 + i * 80}px`,
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      left: `${20 + i * 10}%`,
+                      top: `${20 + i * 5}%`,
+                      willChange: 'transform'
+                    }}
+                    animate={{
+                      rotate: 360,
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 15 + i * 5,
+                      repeat: Infinity,
+                      ease: "linear",
+                      repeatType: "loop"
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Content container */}
+              <div className="max-w-7xl mx-auto relative z-10">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Left column - Text content */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ amount: 0.5 }}
+                    transition={{ duration: 0.4 }}
+                    className="text-center lg:text-left"
+                  >
+                    <motion.h2
+                      className="text-5xl md:text-6xl font-bold mb-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ amount: 0.5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+                        Stay Ahead of
+                      </span>
+                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
+                        the Future
+                      </span>
+                    </motion.h2>
+
+                    <motion.p
+                      className="text-xl text-gray-300 mb-8"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      Join our newsletter and get exclusive insights, industry updates,
+                      and special offers delivered straight to your inbox.
+                    </motion.p>
+
+                    {/* Stats with optimized animations */}
+                    <motion.div
+                      className="grid grid-cols-2 gap-6 mt-12"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="text-center lg:text-left">
+                        <div className="text-3xl font-bold text-white mb-2">5000+</div>
+                        <div className="text-gray-400">Subscribers</div>
+                      </div>
+                      <div className="text-center lg:text-left">
+                        <div className="text-3xl font-bold text-white mb-2">Weekly</div>
+                        <div className="text-gray-400">Updates</div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+
+                  {/* Right column - Newsletter form */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ amount: 0.5 }}
+                    transition={{ duration: 0.4 }}
+                    className="relative"
+                  >
+                    {/* Simplified decorative elements */}
+                    <div className="absolute -top-12 -right-12 w-20 h-20 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full blur-xl opacity-20" />
+                    <div className="absolute -bottom-12 -left-12 w-24 h-24 bg-gradient-to-r from-[#19234d] to-[#2b5a9e] rounded-full blur-xl opacity-20" />
+
+                    {/* Newsletter component */}
+                    <NewsletterForm />
+                  </motion.div>
+                </div>
+              </div>
+            </motion.section>
           </motion.div>
         </motion.div>
       </div>

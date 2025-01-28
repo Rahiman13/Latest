@@ -54,8 +54,7 @@ const Navbar = () => {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`p-2 rounded-xl bg-black/10 backdrop-blur-md'
-              }`}
+              className="p-2 rounded-xl bg-white/95 backdrop-blur-md shadow-lg"
             >
               <img src={Logo} alt="Logo" className="h-14 w-auto" />
             </motion.div>
