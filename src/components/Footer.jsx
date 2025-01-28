@@ -249,11 +249,10 @@ const Footer = () => {
               {/* <div className="flex items-center space-x-2 mb-4"> */}
               <Link to="/" className="flex items-center space-x-2">
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`p-2 rounded-xl bg-black/10 backdrop-blur-md'
-              }`}
-                >
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-2 rounded-xl bg-white/95 backdrop-blur-md shadow-lg opacity-60"
+            >
 
                   <img src={Logo} alt="Logo" className="h-42 w-auto" />
                 </motion.div>
