@@ -10,7 +10,7 @@ import { FaReact, FaNodeJs, FaAws, FaDocker, FaDatabase } from 'react-icons/fa';
 import { SiTypescript, SiJavascript, SiMongodb } from 'react-icons/si';
 import Lottie from 'lottie-react';
 // import digitalTransformationAnimation from '../assets/Home-Hero-section.json'; // You'll need to add this animation file
-import digitalTransformationAnimation from '../assets/Home-Hero2.json'; // You'll need to add this animation file
+import digitalTransformationAnimation from '../assets/Home-hero2.json'; // You'll need to add this animation file
 import { useInView as useInViewObserver } from 'react-intersection-observer';
 
 const Home = () => {
