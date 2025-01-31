@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useRef } from 'react';
+import React, { useEffect, useState, memo, useRef, Suspense, ErrorBoundary, useCallback, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring, useAnimation, useInView } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import NewsletterForm from '../components/NewsLetter';
@@ -12,6 +12,37 @@ import Lottie from 'lottie-react';
 // import digitalTransformationAnimation from '../assets/Home-Hero-section.json'; // You'll need to add this animation file
 import digitalTransformationAnimation from '../assets/Home-hero2.json'; // You'll need to add this animation file
 import { useInView as useInViewObserver } from 'react-intersection-observer';
+import { HeroModel, ServicesModel, FeaturesModel, ProcessModel } from '../components/ThreeModels';
+import { Canvas } from '@react-three/fiber';
+import ModelErrorBoundary from '../components/ErrorBoundary';
+import { createGlobalStyle } from 'styled-components';
+
+// Move styles to a styled-components GlobalStyle
+const GlobalStyles = createGlobalStyle`
+  .optimize-animation {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    will-change: transform, opacity;
+  }
+
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .optimize-animation {
+      animation: none !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    
+    .smooth-scroll {
+      scroll-behavior: auto;
+    }
+  }
+`;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -52,28 +83,33 @@ const Home = () => {
     {
       icon: "🌐",
       title: "Web Development",
-      description: "Modern, responsive websites and web applications built with cutting-edge technologies."
+      description: "Modern, responsive websites and web applications built with cutting-edge technologies.",
+      image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
     },
     {
       icon: "📱",
       title: "App Development",
-      description: "Native and cross-platform mobile applications for iOS and Android."
+      description: "Native and cross-platform mobile applications for iOS and Android.",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
     },
 
     {
       icon: "🎯",
       title: "Digital Marketing",
-      description: "Strategic digital presence and marketing solutions for your business growth."
+      description: "Strategic digital presence and marketing solutions for your business growth.",
+      image: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZmZXNpb25hbCUyMHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D"
     },
     {
       icon: "🎨",
       title: "Web Design",
-      description: "Creative and intuitive user interfaces that enhance user experience."
+      description: "Creative and intuitive user interfaces that enhance user experience.",
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
     },
     {
       icon: "👥",
       title: "Staffing Solutions",
-      description: "Connect with skilled professionals to build your dream team."
+      description: "Connect with skilled professionals to build your dream team.",
+      image: "https://images.unsplash.com/photo-1558222218-b7b54eede3f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmZlc2lvbmFsJTIwcGVvcGxlfGVufDB8fDB8fHww"
     }
   ];
 
@@ -301,6 +337,25 @@ const Home = () => {
     initializeData();
   }, []);
 
+  const useThrottledScroll = (callback, delay = 16) => {
+    const lastRun = useRef(Date.now());
+    const timeout = useRef(null);
+
+    return useCallback(() => {
+      if (timeout.current) {
+        cancelAnimationFrame(timeout.current);
+      }
+
+      timeout.current = requestAnimationFrame(() => {
+        const now = Date.now();
+        if (now - lastRun.current >= delay) {
+          callback();
+          lastRun.current = now;
+        }
+      });
+    }, [callback, delay]);
+  };
+
   useEffect(() => {
     let rafId;
     let lastScrollY = window.scrollY;
@@ -331,36 +386,51 @@ const Home = () => {
   }, []);
 
   const BubblesBackground = memo(() => {
+    const bubbleElements = useMemo(() => 
+      bubbles.slice(10, 150).map((bubble, i) => ({
+        ...bubble,
+        key: i,
+        style: {
+          width: bubble.size * 1.5,
+          height: bubble.size * 1.5,
+          left: `${bubble.initialX}%`,
+          top: `${bubble.initialY}%`,
+          background: `radial-gradient(circle at 30% 30%, 
+            ${i % 2 === 0 ? 'rgba(217,118,74,0.15)' : 'rgba(43,90,158,0.15)'}, 
+            transparent)`,
+        }
+      })), 
+      []
+    );
+
     return (
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {bubbles.slice(0, 8).map((bubble, i) => (  // Reduced from 12 to 8
+        {bubbleElements.map(bubble => (
           <motion.div
-            key={i}
+            key={bubble.key}
             className="absolute rounded-full optimize-animation"
             style={{
-              width: bubble.size,
-              height: bubble.size,
-              left: `${bubble.initialX}%`,
-              top: `${bubble.initialY}%`,
-              background: `radial-gradient(circle at 30% 30%, ${bubble.color}, transparent)`,
+              ...bubble.style,
               transform: 'translateZ(0)',
-              opacity: 0.3
+              willChange: 'transform',
+              backfaceVisibility: 'hidden'
             }}
             animate={{
-              y: [-bubble.moveRange / 6, bubble.moveRange / 6],  // Reduced range
-              x: [-bubble.moveRange / 8, bubble.moveRange / 8],  // Reduced range
+              y: [-bubble.moveRange, bubble.moveRange],
+              x: [-bubble.moveRange / 2, bubble.moveRange / 2],
             }}
             transition={{
               duration: bubble.duration * 3,
               repeat: Infinity,
               ease: "linear",
-              repeatType: "mirror"
+              repeatType: "mirror",
+              delay: bubble.key * 0.1
             }}
           />
         ))}
       </div>
     );
-  }, () => true);  // Prevent unnecessary re-renders
+  }, () => true);
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 100 },
@@ -524,285 +594,331 @@ const Home = () => {
     const subText = "Services";
     const mainLetters = Array.from(mainText);
     const subLetters = Array.from(subText);
+    const controls = useAnimation();
+
+    useEffect(() => {
+      controls.start("visible");
+    }, [controls]);
 
     return (
-      <section className="relative py-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 relative">
-          <ServicesHeading />
+      <Section>
+        <div className="max-w-7xl mx-auto px-4 py-20 relative">
+          {/* Animated Heading Container */}
+          <div className="relative mb-20">
+            {/* Background Text Effect */}
+            <motion.h2
+              className="text-[150px] font-bold text-center opacity-5 absolute top-[-80px] left-[300px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              initial={{ scale: 0.5, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 0.05 }}
+              viewport={{ once: false, margin: "-10px" }}
+              transition={{ duration: 0.8 }}
+            >
+              SERVICES
+            </motion.h2>
 
-          {/* Decorative Lines */}
-          <div className="absolute top-52 left-0 bottom-0 right-0 flex justify-center gap-4">
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
-                animate={{
-                  scaleX: [1, 1.5, 1],
-                  opacity: [0.5, 1, 0.5],
+            {/* Main Animated Text */}
+            <div className="flex items-center justify-center gap-x-4">
+              {/* "Our" Text sliding from left */}
+              <motion.div 
+                className="flex gap-x-2"
+                initial={{ x: "-100vw", opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ amount: 0.5, margin: "-10px" }}
+                variants={{
+                  hidden: { x: "-100vw", opacity: 0 },
+                  visible: { 
+                    x: 0, 
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      duration: 1.5,
+                      bounce: 0.3
+                    }
+                  }
                 }}
-                transition={{
-                  duration: 2,
-                  delay: i * 0.2,
-                  repeat: Infinity,
+                animate={controls}
+              >
+                {mainLetters.map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    className="text-6xl md:text-7xl font-bold"
+                    whileHover={{
+                      scale: 1.2,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300">
+                      {letter}
+                    </span>
+                  </motion.span>
+                ))}
+              </motion.div>
+
+              {/* "Services" Text sliding from right */}
+              <motion.div 
+                className="flex gap-x-2"
+                initial="hidden"
+                whileInView={{ opacity: 1 }}
+                viewport={{ amount: 0.5, margin: "-10px" }}
+                variants={{
+                  hidden: { x: "100vw", opacity: 0 },
+                  visible: { 
+                    x: 0, 
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      duration: 1.5,
+                      bounce: 0.3
+                    }
+                  }
                 }}
-              />
-            ))}
+                animate={controls}
+              >
+                {subLetters.map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    className="text-6xl md:text-7xl font-bold"
+                    whileHover={{
+                      scale: 1.2,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
+                      {letter}
+                    </span>
+                  </motion.span>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Decorative Lines */}
+            <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-4">
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="h-1 w-20 rounded-full bg-gradient-to-r from-[#d9764a] to-[#2b5a9e]"
+                  animate={{
+                    scaleX: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: i * 0.2,
+                    repeat: Infinity,
+                  }}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          {/* Rest of your services grid content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {services.map((service, index) => (
               <motion.div
                 key={index}
-                className="group perspective-1000"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
+                className="group perspective-[2000px]"
+                initial={{ opacity: 0, rotateX: -30, y: 50 }}
+                whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                transition={{ 
+                  duration: 0.8,
+                  delay: index * 0.2,
+                  type: "spring",
+                  stiffness: 100
+                }}
               >
                 <motion.div
-                  className="relative bg-gradient-to-br from-white/5 to-white/10 rounded-3xl p-8 transform-gpu transition-all duration-500"
+                  className="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer"
+                  style={{ transformStyle: "preserve-3d" }}
                   whileHover={{
                     rotateY: 15,
                     rotateX: -5,
-                    translateZ: "50px",
+                    translateZ: 50,
+                    transition: { duration: 0.4 }
                   }}
-                  style={{ transformStyle: "preserve-3d" }}
                 >
-                  {/* Updated Service Card Icon */}
-                  <motion.div
-                    className="absolute -top-10 left-10 w-20 h-20 flex items-center justify-center transform-gpu"
-                    style={{ transformStyle: "preserve-3d" }}
-                  >
-                    {/* Rotating Background */}
+                  {/* Background Image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{ 
+                      backgroundImage: `url(${service.image})`,
+                      backgroundBlendMode: 'overlay',
+                    }}
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
+
+                  {/* Floating Icon */}
+                  <div className="absolute top-4 right-4 w-16 h-16">
                     <motion.div
-                      className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#d9764a] to-[#2b5a9e]"
+                      className="absolute inset-0 bg-gradient-to-br from-[#d9764a] to-[#2b5a9e] rounded-xl"
                       animate={{
-                        rotate: [0, 360],
+                        rotate: [0, 360]
                       }}
                       transition={{
-                        duration: 8,
+                        duration: 6,
                         repeat: Infinity,
                         ease: "linear"
                       }}
                     />
-
-                    {/* Static Icon */}
-                    <div className="relative z-10 text-4xl text-white">
+                    <div className="absolute inset-0 flex items-center justify-center text-3xl text-white z-10">
                       {service.icon}
                     </div>
-                  </motion.div>
-
-                  {/* Content */}
-                  <div className="relative z-10 pl-16 pt-8">
-                    <h3 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-400 leading-relaxed">{service.description}</p>
-
-                    {/* Interactive Features List */}
-                    <motion.ul className="mt-6 space-y-3">
-                      {service.features?.map((feature, i) => (
-                        <motion.li
-                          key={i}
-                          className="flex items-center space-x-3 text-sm text-gray-300"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                        >
-                          <motion.span
-                            className="w-2 h-2 bg-[#d9764a] rounded-full"
-                            whileHover={{ scale: 1.5 }}
-                          />
-                          <span>{feature}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
                   </div>
 
-                  {/* Decorative Elements */}
-                  <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-[#d9764a]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-                  <div className="absolute -left-4 -top-4 w-32 h-32 bg-[#2b5a9e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  };
-
-  const HeroSection = () => {
-    return (
-      <motion.section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 ">
-          {/* Animated Code Rain Effect */}
-          {/* <div className="absolute inset-0 opacity-20">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-sm text-[#4CAF50] whitespace-nowrap"
-                initial={{ y: -100, x: Math.random() * 100 + '%' }}
-                animate={{
-                  y: '100vh',
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2
-                }}
-              >
-                {'{code}'}
-              </motion.div>
-            ))}
-          </div> */}
-
-          {/* Floating Tech Icons */}
-          <div className="absolute inset-0">
-            {[
-              { icon: FaReact, color: '#FF69B4', position: { top: '50%', right: '5%' } },
-              { icon: SiJavascript, color: '#FFD700', position: { bottom: '5%', right: '10%' } },
-              // { icon: SiTypescript, color: '#007ACC', position: { bottom: '25%', right: '45%' } },
-              // { icon: FaAws , color: '#33CC33', position: { top: '20%', right: '15%' } },
-              { icon: FaNodeJs, color: '#FFA07A', position: { top: '20%', right: '40%' } },
-              { icon: FaDatabase, color: '#007BFF', position: { bottom: '8%', right: '25%' } },
-              { icon: SiMongodb, color: '#3FA037', position: { bottom: '40%', right: '43%' } },
-              // { icon: FaDocker, color: '#008080', position: { top: '30%', right: '10%' } }
-            ].map((tech, i) => {
-              const Icon = tech.icon;
-              return (
-                <motion.div
-                  key={i}
-                  className="absolute"
-                  style={{
-                    ...tech.position,
-                    color: tech.color,
-                    opacity: 0.2
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    // rotate: [0, 360],
-                    scale: [1, 1.2, 1]
-                  }}
-                  transition={{
-                    duration: 5 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: i * 0.5
-                  }}
-                >
-                  <Icon size={50} /> {/* Changed size to 50 for all icons */}
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <motion.div className="mb-6 flex items-center space-x-2">
-                <div className="h-1 w-12 bg-[#d9764a]" />
-                <span className="text-[#d9764a] font-semibold">INNOVATIVE SOLUTIONS</span>
-              </motion.div>
-
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6">
-                <motion.span
-                  className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  Transforming Ideas
-                </motion.span>
-                <motion.span
-                  className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527] leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  Into Digital Reality
-                </motion.span>
-              </h1>
-
-              <motion.p
-                className="text-lg text-gray-300 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                We craft cutting-edge software solutions that empower businesses
-                to thrive in the digital age. From web applications to cloud
-                infrastructure, we bring your vision to life.
-              </motion.p>
-
-              <motion.div
-                className="flex gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                <button className="px-8 py-3 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-lg text-white font-semibold hover:scale-105 transition-transform flex items-center gap-2">
-                  Start Project
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1, repeat: Infinity }}
+                  {/* Content Container */}
+                  <motion.div
+                    className="absolute inset-x-0 bottom-0 p-6 transform transition-transform duration-500 group-hover:-translate-y-[calc(100%-80px)]"
                   >
-                    →
-                  </motion.span>
-                </button>
-                <button className="px-8 py-3 border border-[#d9764a]/30 rounded-lg text-white font-semibold hover:bg-[#d9764a]/10 transition-colors">
-                  Our Services
-                </button>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      {service.title}
+                    </h3>
+                    
+                    <div className="text-gray-300 opacity-0 transform translate-y-10 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+                      <p className="mb-4">{service.description}</p>
+                      
+                      {/* Features List */}
+                      <ul className="space-y-2">
+                        {service.features?.map((feature, i) => (
+                          <motion.li
+                            key={i}
+                            className="flex items-center space-x-2"
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                          >
+                            <motion.div
+                              className="w-1.5 h-1.5 bg-[#d9764a] rounded-full"
+                              whileHover={{ scale: 1.5 }}
+                            />
+                            <span className="text-sm">{feature}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-
-            {/* Right Content - Lottie Animation */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="relative w-full aspect-square max-w-[600px] mx-auto">
-                <Lottie
-                  animationData={digitalTransformationAnimation}
-                  loop={true}
-                  autoplay={true}
-                  className="w-full h-full"
-                />
-
-                {/* Floating Stats */}
-                <motion.div
-                  className="absolute -left-10 top-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <div className="text-2xl font-bold text-white">250+</div>
-                  <div className="text-sm text-gray-300">Projects Delivered</div>
-                </motion.div>
-
-                <motion.div
-                  className="absolute -right-5 bottom-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                >
-                  <div className="text-2xl font-bold text-white">99%</div>
-                  <div className="text-sm text-gray-300">Client Satisfaction</div>
-                </motion.div>
-              </div>
-            </motion.div>
+            ))}
           </div>
         </div>
-      </motion.section>
+      </Section>
     );
   };
+
+  const HeroSection = () => (
+    <motion.section className="relative min-h-screen flex items-center overflow-hidden">
+      <div className="absolute right-0 w-1/2 h-[100vh]">
+        <ModelErrorBoundary>
+          <HeroModel />
+        </ModelErrorBoundary>
+      </div>
+      
+      {/* Rest of the hero content */}
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Existing hero content */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div className="mb-6 flex items-center space-x-2">
+              <div className="h-1 w-12 bg-[#d9764a]" />
+              <span className="text-[#d9764a] font-semibold">INNOVATIVE SOLUTIONS</span>
+            </motion.div>
+
+            <h1 className="text-5xl lg:text-7xl font-bold mb-6">
+              <motion.span
+                className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-300 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                Transforming Ideas
+              </motion.span>
+              <motion.span
+                className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527] leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                Into Digital Reality
+              </motion.span>
+            </h1>
+
+            <motion.p
+              className="text-lg text-gray-300 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              We craft cutting-edge software solutions that empower businesses
+              to thrive in the digital age. From web applications to cloud
+              infrastructure, we bring your vision to life.
+            </motion.p>
+
+            <motion.div
+              className="flex gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <button className="px-8 py-3 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-lg text-white font-semibold hover:scale-105 transition-transform flex items-center gap-2">
+                Start Project
+                <motion.span
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  →
+                </motion.span>
+              </button>
+              <button className="px-8 py-3 border border-[#d9764a]/30 rounded-lg text-white font-semibold hover:bg-[#d9764a]/10 transition-colors">
+                Our Services
+              </button>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Content - Lottie Animation */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="relative w-full aspect-square max-w-[600px] mx-auto">
+              <Lottie
+                animationData={digitalTransformationAnimation}
+                loop={true}
+                autoplay={true}
+                className="w-full h-full"
+              />
+
+              {/* Floating Stats */}
+              <motion.div
+                className="absolute -left-10 top-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="text-2xl font-bold text-white">250+</div>
+                <div className="text-sm text-gray-300">Projects Delivered</div>
+              </motion.div>
+
+              <motion.div
+                className="absolute -right-5 bottom-1/4 bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+              >
+                <div className="text-2xl font-bold text-white">99%</div>
+                <div className="text-sm text-gray-300">Client Satisfaction</div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </motion.section>
+  );
 
   // Enhanced Scroll-Triggered Animations
   const scrollVariants = {
@@ -1730,8 +1846,218 @@ const Home = () => {
 
   const baseHeadingStyles = "text-5xl md:text-6xl lg:text-7xl font-bold mb-8"
 
+  const EnhancedBackground = () => {
+    const [techBubbles, setTechBubbles] = useState([]);
+    const maxBubbles = 8;
+
+    useEffect(() => {
+      const createBubble = () => {
+        if (techBubbles.length >= maxBubbles) return;
+
+        const newBubble = {
+          id: Date.now(),
+          size: 40 + Math.random() * 60,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          lifespan: 8000 + Math.random() * 4000, // Random lifespan between 8-12 seconds
+        };
+
+        setTechBubbles(prev => [...prev, newBubble]);
+
+        // Remove bubble after lifespan
+        setTimeout(() => {
+          setTechBubbles(prev => prev.filter(b => b.id !== newBubble.id));
+        }, newBubble.lifespan);
+      };
+
+      // Create new bubbles periodically
+      const interval = setInterval(createBubble, 2000);
+      return () => clearInterval(interval);
+    }, [techBubbles.length]);
+
+    return (
+      <>
+        {/* Tech Circuit Lines */}
+        <div className="fixed inset-0 pointer-events-none">
+          <svg className="w-full h-full opacity-[0.07]">
+            <pattern
+              id="circuit-pattern"
+              x="0"
+              y="0"
+              width="100"
+              height="100"
+              patternUnits="userSpaceOnUse"
+            >
+              <motion.path
+                d="M 10 50 L 40 50 M 60 50 L 90 50 M 50 10 L 50 40 M 50 60 L 50 90"
+                stroke="url(#tech-gradient)"
+                strokeWidth="0.5"
+                fill="none"
+                animate={{
+                  strokeDasharray: ["0,200", "200,0"],
+                  strokeDashoffset: [0, -200],
+                }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+              <circle cx="50" cy="50" r="3" fill="url(#tech-gradient)" opacity="0.5" />
+            </pattern>
+            <defs>
+              <linearGradient id="tech-gradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#d9764a" />
+                <stop offset="100%" stopColor="#2b5a9e" />
+              </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
+          </svg>
+        </div>
+
+        {/* Floating Tech Elements with Creation/Destruction */}
+        <div className="fixed inset-0 pointer-events-none">
+          {techBubbles.map((bubble) => (
+            <motion.div
+              key={bubble.id}
+              className="absolute"
+              style={{
+                width: `${bubble.size}px`,
+                height: `${bubble.size}px`,
+                left: `${bubble.x}%`,
+                top: `${bubble.y}%`,
+                background: 'rgba(255, 255, 255, 0.01)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                borderRadius: '20%',
+              }}
+              initial={{ 
+                opacity: 0,
+                scale: 0.5,
+              }}
+              animate={{
+                opacity: [0, 0.6, 0.3],
+                rotate: [0, 180],
+                scale: [0.5, 1.1, 1],
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.5,
+                transition: { duration: 0.5 }
+              }}
+              transition={{
+                duration: bubble.lifespan / 1000,
+                ease: "linear",
+              }}
+            >
+              {/* Inner Tech Details */}
+              <motion.div 
+                className="absolute inset-2 border border-[#d9764a]/20 rounded-[15%]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <motion.div 
+                className="absolute inset-4 border border-[#2b5a9e]/20 rounded-[10%]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Dynamic Grid System */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(217,118,74,0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(43,90,158,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '100px 100px',
+            }}
+          >
+            <motion.div
+              className="w-full h-full"
+              animate={{
+                x: [-100, 0],
+                y: [-100, 0],
+              }}
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Professional Glow Effects */}
+        <div className="fixed inset-0 pointer-events-none">
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full blur-[100px]"
+              style={{
+                width: `${400 + i * 200}px`,
+                height: `${400 + i * 200}px`,
+                background: i % 2 === 0
+                  ? 'radial-gradient(circle, rgba(217,118,74,0.03), transparent 70%)'
+                  : 'radial-gradient(circle, rgba(43,90,158,0.03), transparent 70%)',
+              }}
+              animate={{
+                x: [0, 50, 0],
+                y: [0, 30, 0],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 20 + i * 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      </>
+    );
+  };
+
+  // Add these performance optimization classes
+  const performanceOptimizedAnimation = {
+    className: "will-change-transform transform-gpu",
+    style: {
+      backfaceVisibility: "hidden",
+      perspective: 1000,
+      translateZ: 0
+    }
+  }
+
+  // Use React.memo for animated components
+  const AnimatedElement = memo(({ children, ...props }) => (
+    <motion.div
+      {...performanceOptimizedAnimation}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  ));
+
+  // Add animation preloading
+  useEffect(() => {
+    const preloadAnimations = () => {
+      const elements = document.querySelectorAll('.motion-section');
+      elements.forEach(element => {
+        element.style.willChange = 'transform, opacity';
+      });
+    };
+    preloadAnimations();
+  }, []);
+
   return (
     <>
+      <GlobalStyles />
       <AnimatePresence>
 
         {isLoading && <PageLoader />}
@@ -1739,6 +2065,7 @@ const Home = () => {
       <div className="min-h-screen bg-gradient-to-b from-[#19234d] to-[#2b5a9e] overflow-hidden">
         {/* Add Toaster component */}
         <Toaster />
+        <EnhancedBackground />
 
         {/* Progress Bar - smoother animation */}
         <motion.div
@@ -1748,6 +2075,8 @@ const Home = () => {
 
         {/* Floating Bubbles Container - spans entire page */}
         <BubblesBackground />
+        {/* <EnhancedBackground /> */}
+
 
         {/* Enhanced Background Elements */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -2111,6 +2440,8 @@ const Home = () => {
                 </div>
               </div>
             </Section>
+            
+            
 
 
             {/* Features Section */}
@@ -2365,28 +2696,3 @@ const Home = () => {
 
 export default Home;
 
-<style>{`
-  .optimize-animation {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000;
-    will-change: transform, opacity;
-  }
-
-  .smooth-scroll {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .optimize-animation {
-      animation: none !important;
-      transform: none !important;
-      transition: none !important;
-    }
-    
-    .smooth-scroll {
-      scroll-behavior: auto;
-    }
-  }
-`}</style>

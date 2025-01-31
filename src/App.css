@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #19234d, #2b5a9e);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  background: transparent;
+  min-height: 100vh;
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+    touch-action: none;
+}
+
+
+.perspective-[2000px] {
+    perspective: 2000px;
+}
+
+[style*="transform-style: preserve-3d"] {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}

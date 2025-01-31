@@ -330,6 +330,47 @@ const Home = () => {
     </motion.div>
   );
 
+  const NewsletterSection = () => {
+    return (
+      <motion.section
+        className="relative py-32 px-4 overflow-hidden"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/90 to-[#2b5a9e]/90 backdrop-blur-md" />
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              background: [
+                'radial-gradient(circle at 0% 0%, #d9764a20, transparent 50%)',
+                'radial-gradient(circle at 100% 100%, #d9764a20, transparent 50%)',
+                'radial-gradient(circle at 0% 0%, #d9764a20, transparent 50%)',
+              ]
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Stay Updated
+          </motion.h2>
+          
+          <NewsletterForm />
+        </div>
+      </motion.section>
+    );
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -1076,126 +1117,7 @@ const Home = () => {
             </section>
 
             {/* Newsletter Section - Optimized animations */}
-            <motion.section
-              className="relative py-32 px-4 md:px-6 overflow-hidden"
-              initial={{ opacity: 0 }}
-              whileInView={{
-                opacity: 1,
-                transition: {
-                  duration: 0.4,
-                  ease: "easeOut"
-                }
-              }}
-              viewport={{
-                amount: 0.3,
-                margin: "-50px"
-              }}
-            >
-              {/* Background gradient overlay - Simplified */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#19234d]/50 to-[#2b5a9e]/50 backdrop-blur-sm" />
-
-              {/* Animated circles - Optimized */}
-              <div className="absolute inset-0">
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute rounded-full mix-blend-overlay"
-                    style={{
-                      width: `${200 + i * 80}px`,
-                      height: `${200 + i * 80}px`,
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      left: `${20 + i * 10}%`,
-                      top: `${20 + i * 5}%`,
-                      willChange: 'transform'
-                    }}
-                    animate={{
-                      rotate: 360,
-                      scale: [1, 1.05, 1],
-                    }}
-                    transition={{
-                      duration: 15 + i * 5,
-                      repeat: Infinity,
-                      ease: "linear",
-                      repeatType: "loop"
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Content container */}
-              <div className="max-w-7xl mx-auto relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  {/* Left column - Text content */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
-                    transition={{ duration: 0.4 }}
-                    className="text-center lg:text-left"
-                  >
-                    <motion.h2
-                      className="text-5xl md:text-6xl font-bold mb-6"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ amount: 0.5 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-                        Stay Ahead of
-                      </span>
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#d9764a] to-[#de7527]">
-                        the Future
-                      </span>
-                    </motion.h2>
-
-                    <motion.p
-                      className="text-xl text-gray-300 mb-8"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ amount: 0.5 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      Join our newsletter and get exclusive insights, industry updates,
-                      and special offers delivered straight to your inbox.
-                    </motion.p>
-
-                    {/* Stats with optimized animations */}
-                    <motion.div
-                      className="grid grid-cols-2 gap-6 mt-12"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ amount: 0.5 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="text-center lg:text-left">
-                        <div className="text-3xl font-bold text-white mb-2">5000+</div>
-                        <div className="text-gray-400">Subscribers</div>
-                      </div>
-                      <div className="text-center lg:text-left">
-                        <div className="text-3xl font-bold text-white mb-2">Weekly</div>
-                        <div className="text-gray-400">Updates</div>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-
-                  {/* Right column - Newsletter form */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ amount: 0.5 }}
-                    transition={{ duration: 0.4 }}
-                    className="relative"
-                  >
-                    {/* Simplified decorative elements */}
-                    <div className="absolute -top-12 -right-12 w-20 h-20 bg-gradient-to-r from-[#d9764a] to-[#de7527] rounded-full blur-xl opacity-20" />
-                    <div className="absolute -bottom-12 -left-12 w-24 h-24 bg-gradient-to-r from-[#19234d] to-[#2b5a9e] rounded-full blur-xl opacity-20" />
-
-                    {/* Newsletter component */}
-                    <NewsletterForm />
-                  </motion.div>
-                </div>
-              </div>
-            </motion.section>
+            <NewsletterSection />
           </motion.div>
         </motion.div>
       </div>
