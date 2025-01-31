@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Navbar';
 import Footer from './components/Footer';
@@ -9,20 +9,20 @@ import PageLoader from './components/PageLoader';
 import CreativeBackground from './components/CreativeBackground';
 import ScrollOptimizedBackground from './components/ScrollOptimizedBackground';
 
-// Lazy load all pages
-const Home = lazy(() => import('./Pages/Home'));
-const About = lazy(() => import('./Pages/About'));
-const Services = lazy(() => import('./Pages/Services'));
-const Blog = lazy(() => import('./Pages/Blog'));
-const Contact = lazy(() => import('./Pages/Contact'));
-const Staff = lazy(() => import('./Pages/Services/Staff'));
-const WebDesign = lazy(() => import('./Pages/Services/WebDesign'));
-const WebDev = lazy(() => import('./Pages/Services/WebDev'));
-const AppDev = lazy(() => import('./Pages/Services/AppDev'));
-const SocialMedia = lazy(() => import('./Pages/Services/SocialMedia'));
-const Portfolio = lazy(() => import('./Pages/Portfolio'));
-const Careers = lazy(() => import('./Pages/Careers'));
-const Industries = lazy(() => import('./Pages/Industries'));
+// Direct imports instead of lazy loading
+import Home from './Pages/Home';
+import About from './Pages/About';
+import Services from './Pages/Services';
+import Blog from './Pages/Blog';
+import Contact from './Pages/Contact';
+import Staff from './Pages/Services/Staff';
+import WebDesign from './Pages/Services/WebDesign';
+import WebDev from './Pages/Services/WebDev';
+import AppDev from './Pages/Services/AppDev';
+import SocialMedia from './Pages/Services/SocialMedia';
+import Portfolio from './Pages/Portfolio';
+import Careers from './Pages/Careers';
+import Industries from './Pages/Industries';
 
 const App = () => {
   return (
@@ -33,23 +33,21 @@ const App = () => {
       <BrowserRouter>
         {/* <ScrollToTop /> */}
         <Header />
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/staffing-solutions" element={<Staff />} />
-            <Route path="/services/web-design" element={<WebDesign />} />
-            <Route path="/services/web-development" element={<WebDev />} />
-            <Route path="/services/app-development" element={<AppDev />} />
-            <Route path="/services/digital-marketing" element={<SocialMedia />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/industries" element={<Industries />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/staffing-solutions" element={<Staff />} />
+          <Route path="/services/web-design" element={<WebDesign />} />
+          <Route path="/services/web-development" element={<WebDev />} />
+          <Route path="/services/app-development" element={<AppDev />} />
+          <Route path="/services/digital-marketing" element={<SocialMedia />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/industries" element={<Industries />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
         <Footer />
       </BrowserRouter>
     </>
